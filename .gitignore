@@ -1,0 +1,23 @@
+# Environment files - never commit these
+.env
+backend/.env
+
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Build output
+dist/
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
