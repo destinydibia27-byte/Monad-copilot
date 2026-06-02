@@ -175,7 +175,7 @@ async function start() {
     console.log(`\n🚀 Backend running on port ${PORT}`);
     console.log(`   DB:            ${process.env.DATABASE_URL ? "✓ Supabase connected" : "✗ DATABASE_URL missing"}`);
     console.log(`   GitHub token:  ${process.env.GITHUB_TOKEN     ? "✓ set" : "✗ not set (60 req/hr limit)"}`);
-    console.log(`   Anthropic key: ${process.env.GROQ_API_KEY ? "✓ set" : "✗ not set"}\n`);
+    console.log(`   Groq key: ${process.env.GROQ_API_KEY ? "✓ set" : "✗ not set"}\n`);
   });
 }
 
