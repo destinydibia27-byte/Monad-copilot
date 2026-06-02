@@ -143,31 +143,26 @@ app.post("/generate", async (req, res) => {
   try {
     const { context } = req.body;
     if (!context) return res.status(400).json({ error: "context is required" });
-    if (!process.env.ANTHROPIC_API_KEY)
-      return res.status(500).json({ error: "ANTHROPIC_API_KEY not configured" });
+    if (!process.env.GROQ_API_KEY)
+      return res.status(500).json({ error: "GROQ_API_KEY not configured" });
 
-    const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type":      "application/json",
-        "x-api-key":         process.env.ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model:      "claude-sonnet-4-20250514",
+    const { default: Groq } = await import("groq-sdk");
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    const aiRes = await groq.chat.completions.create({
+        model:      "llama-3.3-70b-versatile",
         max_tokens: 1000,
-        system: `You are a Monad ecosystem content creator writing tweets for Crypto Twitter.
+        messages: [{ role: "system", content: `You are a Monad ecosystem content creator writing tweets for Crypto Twitter.
 Style: concise, punchy, ecosystem-supportive, founder tone — not degen, not corporate.
 Mix educational, hype, and builder-focused content. Occasionally technical but always digestible.
 Feel deeply embedded in the Monad community. No financial advice. Use 🔺 or 🟣 sparingly.
 Return ONLY a JSON array of 2 tweet objects, each with: { "text": "...", "category": "DeFi|Gaming|Infrastructure|Funding|Builder Activity|Community|Ecosystem News" }
 No markdown. No explanation. Raw JSON only.`,
-        messages: [{ role: "user", content: `Generate 2 tweet drafts about this Monad ecosystem update:\n\n${context}` }],
+        }, { role: "user", content: `Generate 2 tweet drafts about this Monad ecosystem update:\n\n${context}` }],
       }),
     });
 
-    const data   = await aiRes.json();
-    const raw    = data.content?.find(b => b.type === "text")?.text || "[]";
+    
+    const raw = aiRes.choices[0].message.content || "[]";
     const parsed = JSON.parse(raw.replace(/```json|```/g, "").trim());
     res.json(parsed);
   } catch (e) { res.status(500).json({ error: e.message }); }
@@ -184,7 +179,7 @@ async function start() {
     console.log(`\n🚀 Backend running on port ${PORT}`);
     console.log(`   DB:            ${process.env.DATABASE_URL ? "✓ Supabase connected" : "✗ DATABASE_URL missing"}`);
     console.log(`   GitHub token:  ${process.env.GITHUB_TOKEN     ? "✓ set" : "✗ not set (60 req/hr limit)"}`);
-    console.log(`   Anthropic key: ${process.env.ANTHROPIC_API_KEY ? "✓ set" : "✗ not set"}\n`);
+    console.log(`   Anthropic key: ${process.env.GROQ_API_KEY ? "✓ set" : "✗ not set"}\n`);
   });
 }
 
