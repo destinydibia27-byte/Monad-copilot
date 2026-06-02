@@ -149,16 +149,12 @@ app.post("/generate", async (req, res) => {
     const { default: Groq } = await import("groq-sdk");
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
     const aiRes = await groq.chat.completions.create({
-        model:      "llama-3.3-70b-versatile",
+        model: "llama-3.3-70b-versatile",
         max_tokens: 1000,
-        messages: [{ role: "system", content: `You are a Monad ecosystem content creator writing tweets for Crypto Twitter.
-Style: concise, punchy, ecosystem-supportive, founder tone — not degen, not corporate.
-Mix educational, hype, and builder-focused content. Occasionally technical but always digestible.
-Feel deeply embedded in the Monad community. No financial advice. Use 🔺 or 🟣 sparingly.
-Return ONLY a JSON array of 2 tweet objects, each with: { "text": "...", "category": "DeFi|Gaming|Infrastructure|Funding|Builder Activity|Community|Ecosystem News" }
-No markdown. No explanation. Raw JSON only.`,
-        }, { role: "user", content: `Generate 2 tweet drafts about this Monad ecosystem update:\n\n${context}` }],
-      }),
+        messages: [
+          { role: "system", content: "You are a Monad ecosystem content creator writing tweets for Crypto Twitter. Style: concise, punchy, ecosystem-supportive, founder tone. Return ONLY a JSON array of 2 tweet objects, each with: {\"text\": \"...\", \"category\": \"DeFi|Gaming|Infrastructure|Funding|Builder Activity|Community|Ecosystem News\"}. No markdown. Raw JSON only." },
+          { role: "user", content: "Generate 2 tweet drafts about this Monad ecosystem update:\n\n" + context }
+        ],
     });
 
     
