@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { T } from "../constants/theme";
 import { useIsMobile } from "../hooks/useWindowWidth";
 import { CatPill, StatusBadge, SrcChip, ActionBtn } from "./UI";
@@ -9,6 +10,13 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
     draft.status === "rejected" ? `${T.red}20`   : T.border;
 
   const overLimit = draft.text.length > 280;
+  const [highlight, setHighlight] = useState(draft.isNew || false);
+  useEffect(() => {
+    if (draft.isNew) {
+      const t = setTimeout(() => setHighlight(false), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [draft.isNew]);
 
   const sources = draft.sources
     ? draft.sources
@@ -20,7 +28,7 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
   return (
     <div
       style={{
-        background: T.card, border: `1px solid ${borderColor}`,
+        background: highlight ? `${T.purple}12` : T.card, border: `1px solid ${highlight ? T.purple : borderColor}`,
         borderRadius: 10, padding: isMobile ? "16px 16px" : "20px 22px",
         opacity: draft.status === "rejected" ? 0.45 : 1,
         transition: "border-color 0.2s, opacity 0.2s",
