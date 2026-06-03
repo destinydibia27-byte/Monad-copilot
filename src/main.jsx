@@ -22,7 +22,7 @@ function LoginScreen() {
     setError(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: "https://monad-copilot.vercel.app" }, },
     });
     if (error) { setError(error.message); setLoading(false); }
   };
