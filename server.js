@@ -1,8 +1,10 @@
 import "dotenv/config";
+import { createClient } from "@supabase/supabase-js";
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 import express from "express";
 import cors from "cors";
 import cron from "node-cron";
-import { createClerkClient } from "@clerk/backend";
+ 
 import {
   initDB, getAllDrafts, insertDraft,
   updateDraftStatus, updateDraftText,
@@ -12,15 +14,16 @@ import {
 const app  = express();
 const PORT = process.env.PORT || 3001;
 
-const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+;
 
 // ── Auth middleware ───────────────────────────────────────────
 async function requireAuth(req, res, next) {
   try {
     const token = req.headers.authorization?.replace("Bearer ", "");
     if (!token) return res.status(401).json({ error: "Unauthorized" });
-    const { sub } = await clerk.verifyToken(token);
-    req.userId = sub;
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    if (error || !user) return res.status(401).json({ error: "Unauthorized" });
+    req.userId = user.id;
     next();
   } catch {
     res.status(401).json({ error: "Invalid token" });
