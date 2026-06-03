@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "./main";
+import { useUser, useClerk } from "@clerk/clerk-react";
 import { T, CATEGORIES, SOURCES, MOBILE } from "./constants/theme";
 import { GITHUB_SOURCES } from "./constants/github";
 import { useIsMobile } from "./hooks/useWindowWidth";
@@ -12,10 +12,10 @@ import { EditModal } from "./components/EditModal";
 import { GenPanel } from "./components/GenPanel";
 import { Toast, Dot, PillBtn, GeneratingBar, SrcChip } from "./components/UI";
 
-export default function MonadCoPilot({ session }) {
+export default function MonadCoPilot() {
   const isMobile = useIsMobile();
-  const user = session?.user;
-  const signOut = () => supabase.auth.signOut();
+  const { user } = useUser();
+  const { signOut } = useClerk();
 
   // ── UI State ─────────────────────────────────────────────
   const [activeTab,    setActiveTab]    = useState("drafts");
@@ -183,11 +183,11 @@ export default function MonadCoPilot({ session }) {
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 {!isMobile && (
                   <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 10, color: T.textDim, letterSpacing: "0.02em" }}>
-                    {user.user_metadata?.full_name || user.email}
+                    {user.primaryEmailAddress?.emailAddress || user.username}
                   </span>
                 )}
-                {user.user_metadata?.avatar_url && (
-                  <img src={user.user_metadata.avatar_url} alt="avatar" style={{ width: 28, height: 28, borderRadius: "50%", border: `1px solid ${T.border2}` }} />
+                {user.imageUrl && (
+                  <img src={user.imageUrl} alt="avatar" style={{ width: 28, height: 28, borderRadius: "50%", border: `1px solid ${T.border2}` }} />
                 )}
                 <button
                   onClick={() => signOut()}
