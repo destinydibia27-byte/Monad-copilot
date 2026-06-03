@@ -44,24 +44,9 @@ export function UpdateRow({ update, selected, onToggle }) {
           </span>
         </div>
         <div style={{ fontFamily: "'Inter',sans-serif", fontSize: isMobile ? 13 : 13.5, color: T.text, lineHeight: 1.65, letterSpacing: "-0.01em" }}>
-          {update.text}
-        <a href={update.url} target='_blank' rel='noopener noreferrer' onClick={e => e.stopPropagation()} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 6, fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim, textDecoration: 'none' }}>↗ view on github</a>
-        <a href={update.url} target='_blank' rel='noopener noreferrer' onClick={e => e.stopPropagation()} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 6, fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim, textDecoration: 'none' }}>↗ view on github</a>
-        
-          href={update.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={e => e.stopPropagation()}
-          style={{
-            display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6,
-            fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5,
-            color: T.textDim, textDecoration: "none", letterSpacing: "0.02em",
-          }}
-          onMouseEnter={e => e.currentTarget.style.color = T.purple}
-          onMouseLeave={e => e.currentTarget.style.color = T.textDim}
-        >
-          view on github
-        </a>
+	{update.text}
+        <a href={update.url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 6, fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim, textDecoration: "none" }}>↗ view on github</a>
+      </div>
         </div>
         {isMobile && (
           <div style={{ marginTop: 10 }}>
