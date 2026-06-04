@@ -108,14 +108,22 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
         </span>
       </div>
       {draft.status === "approved" && (
-  <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`}
-    target="_blank" rel="noopener noreferrer"
-    style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10,
-      padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
-      fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
-      textDecoration: "none" }}>
-    𝕏 Post to X
-  </a>
+ <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`}
+  target="_blank" rel="noopener noreferrer"
+  onClick={e => {
+    e.preventDefault();
+    const text = encodeURIComponent(draft.text);
+    window.location.href = `twitter://post?message=${text}`;
+    setTimeout(() => {
+      window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+    }, 500);
+  }}
+  style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10,
+    padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
+    fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
+    textDecoration: "none" }}>
+  𝕏 Post to X
+</a>
 )}	
     </div>
   );
