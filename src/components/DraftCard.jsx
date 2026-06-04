@@ -107,6 +107,16 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
           {Math.ceil(draft.text.split(" ").length / 3)}s read
         </span>
       </div>
+      {draft.status === "approved" && (
+  <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`}
+    target="_blank" rel="noopener noreferrer"
+    style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10,
+      padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
+      fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
+      textDecoration: "none" }}>
+    𝕏 Post to X
+  </a>
+)}	
     </div>
   );
 }
