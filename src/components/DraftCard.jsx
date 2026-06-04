@@ -112,13 +112,7 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
   target="_blank" rel="noopener noreferrer"
   onClick={e => {
   e.preventDefault();
-  const text = encodeURIComponent(draft.text);
-  const appLink = document.createElement("a");
-  appLink.href = `twitter://post?message=${text}`;
-  appLink.click();
-  setTimeout(() => {
-    window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
-  }, 1000);
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`, "_blank");
 }}
   style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10,
     padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
