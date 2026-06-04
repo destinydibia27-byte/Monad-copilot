@@ -24,6 +24,7 @@ export default function MonadCoPilot({ session }) {
   const [editingDraft, setEditingDraft] = useState(null);
   const [generating,   setGenerating]   = useState(false);
   const [showGenPanel, setShowGenPanel] = useState(false);
+  const [newDraftIds, setNewDraftIds] = useState([]);
   const [toast,        setToast]        = useState(null);
   const [selectedIds,  setSelectedIds]  = useState([]);
   const [time,         setTime]         = useState(new Date());
@@ -60,6 +61,7 @@ export default function MonadCoPilot({ session }) {
     if (ok) {
       setSelectedIds([]);
       setActiveTab("drafts");
+      if (ok) { setNewDraftIds(ok.map(d => d.id)); setTimeout(() => setNewDraftIds([]), 3000); }
     }
     setGenerating(false);
   };
@@ -301,6 +303,7 @@ export default function MonadCoPilot({ session }) {
                 <DraftCard
                   key={d.id}
                   draft={d}
+		  isNew={newDraftIds.includes(d.id)}
                   updates={allUpdates}
                   onApprove={() => updateStatus(d.id, "approved")}
                   onReject={()  => updateStatus(d.id, "rejected")}
