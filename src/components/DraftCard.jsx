@@ -111,13 +111,15 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
  <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`}
   target="_blank" rel="noopener noreferrer"
   onClick={e => {
-    e.preventDefault();
-    const text = encodeURIComponent(draft.text);
-    window.location.href = `twitter://post?message=${text}`;
-    setTimeout(() => {
-      window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
-    }, 500);
-  }}
+  e.preventDefault();
+  const text = encodeURIComponent(draft.text);
+  const appLink = document.createElement("a");
+  appLink.href = `twitter://post?message=${text}`;
+  appLink.click();
+  setTimeout(() => {
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
+  }, 1000);
+}}
   style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10,
     padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
     fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
