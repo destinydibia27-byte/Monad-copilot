@@ -30,8 +30,7 @@ async function requireAuth(req, res, next) {
   }
 }
 
-const app  = express();
-const PORT = process.env.PORT || 3001;
+
 
 // ── CORS ──────────────────────────────────────────────────────
 // Allows both local dev and your Vercel production URL
