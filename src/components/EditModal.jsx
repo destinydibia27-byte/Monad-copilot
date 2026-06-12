@@ -11,7 +11,7 @@ export function EditModal({ draft, onSave, onCancel }) {
 
   return (
     <div style={{
-      position: "fixed", inset: 0, padding: isMobile ? "16px" : "0", zIndex: 500,
+      position: "fixed", inset: 0, zIndex: 500,
       background: "rgba(11,11,15,0.85)", backdropFilter: "blur(8px)",
       display: "flex", alignItems: isMobile ? "flex-end" : "center",
       justifyContent: "center", padding: isMobile ? 0 : 24,
