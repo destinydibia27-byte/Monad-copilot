@@ -71,5 +71,21 @@ export function useDrafts(showToast) {
     }
   };
 
-  return { drafts, loading, updateStatus, saveEdit, generate };
+  const scheduleReminder = (id, scheduledAt) => {
+  const schedules = JSON.parse(localStorage.getItem("scheduledDrafts") || "{}");
+  schedules[id] = scheduledAt;
+  localStorage.setItem("scheduledDrafts", JSON.stringify(schedules));
+  setDrafts(ds => ds.map(d => d.id === id ? { ...d, scheduledAt } : d));
+  showToast("Reminder scheduled!");
+};
+
+const cancelReminder = (id) => {
+  const schedules = JSON.parse(localStorage.getItem("scheduledDrafts") || "{}");
+  delete schedules[id];
+  localStorage.setItem("scheduledDrafts", JSON.stringify(schedules));
+  setDrafts(ds => ds.map(d => d.id === id ? { ...d, scheduledAt: null } : d));
+  showToast("Reminder cancelled");
+};
+
+return { drafts, loading, updateStatus, saveEdit, generate, scheduleReminder, cancelReminder };
 }

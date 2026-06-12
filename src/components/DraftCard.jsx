@@ -3,8 +3,10 @@ import { T } from "../constants/theme";
 import { useIsMobile } from "../hooks/useWindowWidth";
 import { CatPill, StatusBadge, SrcChip, ActionBtn } from "./UI";
 
-export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates = [] }) {
+export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates = [], onSchedule, onCancelSchedule }) {
   const isMobile = useIsMobile();
+  const [showScheduler, setShowScheduler] = useState(false);
+const [scheduleTime, setScheduleTime] = useState("");
   const borderColor =
     draft.status === "approved" ? `${T.green}30` :
     draft.status === "rejected" ? `${T.red}20`   : T.border;
@@ -50,6 +52,11 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
           {draft.isNew && (
             <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: T.purpleL, letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 500 }}>● NEW</span>
           )}
+          {draft.scheduledAt && (
+  <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9,
+    color: T.orange, letterSpacing: "0.08em", textTransform: "uppercase",
+    fontWeight: 500 }}>⏰ {new Date(draft.scheduledAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+)}
           {!isMobile && (
             <div style={{ marginLeft: "auto", display: "flex", gap: 6, flexShrink: 0 }}>
               {draft.status !== "approved" && draft.status !== "rejected" && (
@@ -120,7 +127,24 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
     textDecoration: "none" }}>
   𝕏 Post to X
 </a>
+{showScheduler && (
+  <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center" }}>
+    <input type="datetime-local" value={scheduleTime}
+      onChange={e => setScheduleTime(e.target.value)}
+      style={{ background: T.card, border: `1px solid ${T.border2}`, color: T.text,
+        borderRadius: 6, padding: "6px 10px", fontFamily: "'IBM Plex Mono',monospace",
+        fontSize: 11, outline: "none" }} />
+    <button onClick={() => { onSchedule(scheduleTime); setShowScheduler(false); }}
+      style={{ background: T.purple, color: "#fff", border: "none", borderRadius: 6,
+        padding: "6px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer" }}>
+      Set
+)}
+<button onClick={() => draft.scheduledAt ? onCancelSchedule() : setShowScheduler(!showScheduler)}
+  style={{ marginTop: 8, background: "none", border: `1px solid ${T.border2}`,
+    color: draft.scheduledAt ? T.orange : T.textDim, borderRadius: 6,
+    padding: "5px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer" }}>
+  {draft.scheduledAt ? "⏰ Cancel reminder" : "⏰ Schedule reminder"}
+</button>
 )}	
     </div>
-  );
 }

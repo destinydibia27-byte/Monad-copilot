@@ -25,6 +25,25 @@ export default function MonadCoPilot({ session }) {
   const [generating,   setGenerating]   = useState(false);
   const [showGenPanel, setShowGenPanel] = useState(false);
   const [newDraftIds, setNewDraftIds] = useState([]);
+  // Schedule notification checker
+useEffect(() => {
+  if (Notification.permission === "default") Notification.requestPermission();
+  const interval = setInterval(() => {
+    const schedules = JSON.parse(localStorage.getItem("scheduledDrafts") || "{}");
+    const now = Date.now();
+    Object.entries(schedules).forEach(([id, scheduledAt]) => {
+      if (now >= new Date(scheduledAt).getTime()) {
+        new Notification("Time to post! 🚀", {
+          body: "Your scheduled Monad tweet is ready to post.",
+        });
+        const updated = { ...schedules };
+        delete updated[id];
+        localStorage.setItem("scheduledDrafts", JSON.stringify(updated));
+      }
+    });
+  }, 30000);
+  return () => clearInterval(interval);
+}, []);
   const [toast,        setToast]        = useState(null);
   const [selectedIds,  setSelectedIds]  = useState([]);
   const [time,         setTime]         = useState(new Date());
@@ -42,7 +61,7 @@ export default function MonadCoPilot({ session }) {
   };
 
   // ── Data hooks ────────────────────────────────────────────
-  const { drafts, loading: draftsLoading, updateStatus, saveEdit, generate } = useDrafts(showToast);
+  const { drafts, loading: draftsLoading, updateStatus, saveEdit, generate, scheduleReminder, cancelReminder } = useDrafts(showToast);
   const { updates: allUpdates, loading: githubLoading, error: githubError } = useGitHubUpdates();
 
   // ── Helpers ───────────────────────────────────────────────
@@ -308,7 +327,9 @@ export default function MonadCoPilot({ session }) {
                   onApprove={() => updateStatus(d.id, "approved")}
                   onReject={()  => updateStatus(d.id, "rejected")}
                   onReset={()   => updateStatus(d.id, "pending")}
-                  onEdit={()    => setEditingDraft(d)}
+                  onEdit={() => setEditingDraft(d)}
+                onSchedule={(time) => scheduleReminder(d.id, time)}
+                onCancelSchedule={() => cancelReminder(d.id)}
                 />
               ))}
             </div>

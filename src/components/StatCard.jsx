@@ -1,13 +1,15 @@
 import { T } from "../constants/theme";
+import { useIsMobile } from "../hooks/useWindowWidth";
 
 export function StatCard({ label, val, color, sub, onClick, active }) {
+  const isMobile = useIsMobile();
   return (
     <div
       onClick={onClick}
       style={{
         background: active ? `${color}0F` : T.card,
         border: `1px solid ${active ? `${color}60` : T.border}`,
-        borderRadius: 10, padding: "18px 20px",
+        borderRadius: 10, padding: isMobile ? "12px 14px" : "18px 20px",
         position: "relative", overflow: "hidden",
         transition: "border-color 0.15s, background 0.15s, transform 0.1s",
         cursor: onClick ? "pointer" : "default",
@@ -29,12 +31,12 @@ export function StatCard({ label, val, color, sub, onClick, active }) {
         pointerEvents: "none",
       }} />
       <div style={{
-        fontFamily: "'Syne',sans-serif", fontSize: 32, fontWeight: 800,
+        fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 24 : 32, fontWeight: 800,
         color, lineHeight: 1, marginBottom: 8,
         fontVariantNumeric: "tabular-nums", letterSpacing: "-0.03em",
       }}>{val}</div>
       <div style={{
-        fontFamily: "'Inter',sans-serif", fontSize: 11.5, fontWeight: active ? 600 : 500,
+        fontFamily: "'Inter',sans-serif", fontSize: isMobile ? 10.5 : 11.5, fontWeight: active ? 600 : 500,
         color: active ? color : T.textSub, letterSpacing: "-0.01em",
         transition: "color 0.15s",
       }}>{label}</div>
