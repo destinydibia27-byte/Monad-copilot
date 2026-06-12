@@ -51,7 +51,6 @@ function LoginScreen() {
   const providers = [
     { id: "google",  label: "Continue with Google" },
     { id: "github",  label: "Continue with GitHub" },
-    { id: "twitter", label: "Continue with X" },
   ];
 
   return (
