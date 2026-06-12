@@ -58,12 +58,12 @@ function LoginScreen() {
       minHeight: "100dvh", background: T.bg,
       display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center",
-      fontFamily: "'Inter', sans-serif", padding: 24,
+      fontFamily: "'Inter', sans-serif", padding: "16px",
     }}>
       <div style={{
         width: "100%", maxWidth: 360,
         background: T.card, border: `1px solid ${T.border}`,
-        borderRadius: 16, padding: 32,
+        borderRadius: 12, padding: "28px 24px",
         boxShadow: "0 8px 40px rgba(0,0,0,0.5)",
       }}>
         <div style={{ textAlign: "center", marginBottom: 28 }}>
