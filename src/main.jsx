@@ -55,7 +55,7 @@ function LoginScreen() {
 
   return (
     <div style={{
-      minHeight: "100vh", background: T.bg,
+      minHeight: "100dvh", background: T.bg,
       display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center",
       fontFamily: "'Inter', sans-serif", padding: 24,
@@ -130,7 +130,7 @@ function Root() {
   }, []);
 
   if (session === undefined) return (
-    <div style={{ minHeight: "100vh", background: "#0B0B0F", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ minHeight: "100dvh", background: "#0B0B0F", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <span style={{ color: "#888899", fontFamily: "monospace", fontSize: 12 }}>Loading…</span>
     </div>
   );
