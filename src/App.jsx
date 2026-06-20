@@ -193,7 +193,6 @@ useEffect(() => {
               letterSpacing: "0.1em", textTransform: "uppercase",
               color: T.purple, border: `1px solid ${T.purple}40`,
               padding: "3px 7px", borderRadius: 4, flexShrink: 0,
-          </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 10, width: isMobile ? "100%" : "auto" }}>
             {/* User avatar + sign out */}
