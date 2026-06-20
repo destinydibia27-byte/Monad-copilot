@@ -6,10 +6,11 @@ import { CatPill, StatusBadge, SrcChip, ActionBtn } from "./UI";
 export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates = [], onSchedule, onCancelSchedule }) {
   const isMobile = useIsMobile();
   const [showScheduler, setShowScheduler] = useState(false);
-const [scheduleTime, setScheduleTime] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("");
+
   const borderColor =
     draft.status === "approved" ? `${T.green}30` :
-    draft.status === "rejected" ? `${T.red}20`   : T.border;
+    draft.status === "rejected" ? `${T.red}20`  : T.border;
 
   const overLimit = draft.text.length > 280;
   const [highlight, setHighlight] = useState(draft.isNew || false);
@@ -30,16 +31,20 @@ const [scheduleTime, setScheduleTime] = useState("");
   return (
     <div
       style={{
-        background: highlight ? `${T.purple}12` : T.card, border: `1px solid ${highlight ? T.purple : borderColor}`,
-        borderRadius: 10, padding: isMobile ? "16px 16px" : "20px 22px",
+        background: highlight ? `${T.purple}12` : T.card,
+        border: `1px solid ${highlight ? T.purple : borderColor}`,
+        borderRadius: 10,
+        padding: isMobile ? "16px 16px" : "20px 22px",
         opacity: draft.status === "rejected" ? 0.45 : 1,
         transition: "border-color 0.2s, opacity 0.2s",
         animation: draft.isNew ? "cardSlideIn 0.35s ease-out" : "none",
-        position: "relative", overflow: "hidden",
+        position: "relative",
+        overflow: "hidden",
       }}
       onMouseEnter={e => { if (draft.status !== "rejected") e.currentTarget.style.borderColor = draft.status === "approved" ? `${T.green}50` : `${T.purple}40`; }}
-      onMouseLeave={e => e.currentTarget.style.borderColor = borderColor}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = borderColor; }}
     >
+      {/* approved green bar */}
       {draft.status === "approved" && (
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 2, background: T.green, borderRadius: "10px 0 0 10px" }} />
       )}
@@ -53,10 +58,10 @@ const [scheduleTime, setScheduleTime] = useState("");
             <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: T.purpleL, letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 500 }}>● NEW</span>
           )}
           {draft.scheduledAt && (
-  <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9,
-    color: T.orange, letterSpacing: "0.08em", textTransform: "uppercase",
-    fontWeight: 500 }}>⏰ {new Date(draft.scheduledAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
-)}
+            <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: T.orange, letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 500 }}>
+              🔔 {new Date(draft.scheduledAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+            </span>
+          )}
           {!isMobile && (
             <div style={{ marginLeft: "auto", display: "flex", gap: 6, flexShrink: 0 }}>
               {draft.status !== "approved" && draft.status !== "rejected" && (
@@ -72,33 +77,15 @@ const [scheduleTime, setScheduleTime] = useState("");
             </div>
           )}
         </div>
-        {isMobile && (
-          <div style={{ display: "flex", gap: 6, width: "100%" }}>
-            {draft.status !== "approved" && draft.status !== "rejected" && (
-              <>
-                <ActionBtn color={T.green}  onClick={onApprove} label="Approve" fullWidth />
-                <ActionBtn color={T.red}    onClick={onReject}  label="Reject"  fullWidth />
-                <ActionBtn color={T.purple} onClick={onEdit}    label="Edit"    fullWidth />
-              </>
-            )}
-            {(draft.status === "approved" || draft.status === "rejected") && (
-              <ActionBtn color={T.textDim} onClick={onReset} label="Reset" fullWidth />
-            )}
-          </div>
-        )}
       </div>
 
       {/* Body */}
-      <div style={{
-        fontFamily: "'Inter',sans-serif", fontSize: isMobile ? 13.5 : 14, lineHeight: 1.7,
-        color: T.text, whiteSpace: "pre-wrap", fontWeight: 400, letterSpacing: "-0.01em",
-      }}>{draft.text}</div>
+      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: isMobile ? 13.5 : 14, lineHeight: 1.7, color: T.text, whiteSpace: "pre-wrap", fontWeight: 400, letterSpacing: "-0.01em" }}>
+        {draft.text}
+      </div>
 
       {/* Footer */}
-      <div style={{
-        marginTop: 14, paddingTop: 12, borderTop: `1px solid ${T.border}`,
-        display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8,
-      }}>
+      <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
         <div style={{ display: "flex", gap: 12 }}>
           {sources.map(source => <SrcChip key={source} source={source} />)}
         </div>
@@ -108,43 +95,73 @@ const [scheduleTime, setScheduleTime] = useState("");
           display: "flex", alignItems: "center", gap: 5,
           fontVariantNumeric: "tabular-nums", letterSpacing: "0.01em",
         }}>
-          {overLimit && <span>⚠</span>}
+          {overLimit && <span>⚠️</span>}
           {draft.text.length}/280
           <span style={{ color: T.border2 }}>·</span>
           {Math.ceil(draft.text.split(" ").length / 3)}s read
         </span>
       </div>
+
+      {/* Mobile action buttons */}
+      {isMobile && (
+        <div style={{ display: "flex", gap: 6, width: "100%", marginTop: 12 }}>
+          {draft.status !== "approved" && draft.status !== "rejected" && (
+            <>
+              <ActionBtn color={T.green}  onClick={onApprove} label="Approve" fullWidth />
+              <ActionBtn color={T.red}    onClick={onReject}  label="Reject"  fullWidth />
+              <ActionBtn color={T.purple} onClick={onEdit}    label="Edit"    fullWidth />
+            </>
+          )}
+          {(draft.status === "approved" || draft.status === "rejected") && (
+            <ActionBtn color={T.textDim} onClick={onReset} label="Reset" fullWidth />
+          )}
+        </div>
+      )}
+
+      {/* Post to X */}
       {draft.status === "approved" && (
- <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`}
-  target="_blank" rel="noopener noreferrer"
-  onClick={e => {
-  e.preventDefault();
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`, "_blank");
-}}
-  style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10,
-    padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
-    fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
-    textDecoration: "none" }}>
-  𝕏 Post to X
-</a>
-{showScheduler && (
-  <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center" }}>
-    <input type="datetime-local" value={scheduleTime}
-      onChange={e => setScheduleTime(e.target.value)}
-      style={{ background: T.card, border: `1px solid ${T.border2}`, color: T.text,
-        borderRadius: 6, padding: "6px 10px", fontFamily: "'IBM Plex Mono',monospace",
-        fontSize: 11, outline: "none" }} />
-    <button onClick={() => { onSchedule(scheduleTime); setShowScheduler(false); }}
-      style={{ background: T.purple, color: "#fff", border: "none", borderRadius: 6,
-        padding: "6px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer" }}>
-      Set
-)}
-<button onClick={() => draft.scheduledAt ? onCancelSchedule() : setShowScheduler(!showScheduler)}
-  style={{ marginTop: 8, background: "none", border: `1px solid ${T.border2}`,
-    color: draft.scheduledAt ? T.orange : T.textDim, borderRadius: 6,
-    padding: "5px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer" }}>
-  {draft.scheduledAt ? "⏰ Cancel reminder" : "⏰ Schedule reminder"}
-</button>
-)}	
+        <a
+          href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10,
+            padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
+            fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
+            textDecoration: "none" }}
+          X Post to X
+          𝕏 Post to X
+        </a>
+      )}
+
+      {/* Scheduler */}
+      {showScheduler && (
+        <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center" }}>
+          <input
+            type="datetime-local"
+            value={scheduleTime}
+            onChange={e => setScheduleTime(e.target.value)}
+            style={{ background: T.card, border: `1px solid ${T.border2}`, color: T.text,
+              borderRadius: 6, padding: "6px 10px", fontFamily: "'IBM Plex Mono',monospace",
+              fontSize: 11, outline: "none" }}
+          />
+          <button
+            onClick={() => { onSchedule(scheduleTime); setShowScheduler(false); }}
+            style={{ background: T.purple, color: "#fff", border: "none", borderRadius: 6,
+              padding: "6px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer" }}
+          >
+            Set
+          </button>
+        </div>
+      )}
+
+      <button
+        onClick={() => draft.scheduledAt ? onCancelSchedule() : setShowScheduler(!showScheduler)}
+        style={{ marginTop: 8, background: "none", border: `1px solid ${T.border2}`,
+          color: draft.scheduledAt ? T.orange : T.textDim, borderRadius: 6,
+          padding: "5px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer" }}
+      >
+        {draft.scheduledAt ? "🔔 Cancel reminder" : "🔔 Schedule reminder"}
+      </button>
     </div>
+  );
 }
