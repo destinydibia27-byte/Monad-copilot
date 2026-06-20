@@ -160,7 +160,8 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
           color: draft.scheduledAt ? T.orange : T.textDim, borderRadius: 6,
           padding: "5px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer" }}
       >
-        {draft.scheduledAt ? "🔔 Cancel reminder" : "🔔 Schedule reminder"}
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        {draft.scheduledAt ? "CANCEL SCHEDULE" : "SCHEDULE POST"}
       </button>
     </div>
   );
