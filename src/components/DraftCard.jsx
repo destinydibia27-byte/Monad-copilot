@@ -128,7 +128,8 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
             padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
             fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
             textDecoration: "none" }}
-          X Post to X
+        >
+          𝕏 Post to X
         </a>
       )}
 
