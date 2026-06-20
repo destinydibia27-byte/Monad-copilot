@@ -63,7 +63,7 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
             </span>
           )}
           {!isMobile && (
-            <div style={{ marginLeft: "auto", display: "flex", gap: 6, flexShrink: 0 }}>
+            <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexShrink: 0 }}>
               {draft.status !== "approved" && draft.status !== "rejected" && (
                 <>
                   <ActionBtn color={T.green}  onClick={onApprove} label="Approve" />
@@ -104,7 +104,7 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
 
       {/* Mobile action buttons */}
       {isMobile && (
-        <div style={{ display: "flex", gap: 6, width: "100%", marginTop: 12 }}>
+        <div style={{ display: "flex", gap: 8, width: "100%", marginTop: 12 }}>
           {draft.status !== "approved" && draft.status !== "rejected" && (
             <>
               <ActionBtn color={T.green}  onClick={onApprove} label="Approve" fullWidth />
@@ -124,7 +124,7 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
           href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10,
+          style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 10,
             padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
             fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
             textDecoration: "none" }}
