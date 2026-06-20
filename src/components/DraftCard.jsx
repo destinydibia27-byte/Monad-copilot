@@ -41,7 +41,7 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
         position: "relative",
         overflow: "hidden",
       }}
-      onMouseEnter={e => { if (draft.status !== "rejected") e.currentTarget.style.borderColor = draft.status === "approved" ? `${T.green}50` : `${T.purple}40`; }}
+      onMouseEnter={e => { if (draft.status !== "rejected") e.currentTarget.style.borderColor = draft.status === "approved" ? `${T.green}50` : `${T.purple}50`; }}
       onMouseLeave={e => { e.currentTarget.style.borderColor = borderColor; }}
     >
       {/* approved green bar */}
@@ -55,47 +55,51 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
           <CatPill cat={draft.category} />
           <StatusBadge status={draft.status} />
           {draft.isNew && (
-            <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: T.purpleL, letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 500 }}>● NEW</span>
+            <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: T.purpleL, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              NEW
+            </span>
           )}
           {draft.scheduledAt && (
-            <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: T.orange, letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 500 }}>
+            <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: T.orange, letterSpacing: "0.08em", textTransform: "uppercase" }}>
               🔔 {new Date(draft.scheduledAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             </span>
           )}
-          {!isMobile && (
-            <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexShrink: 0 }}>
-              {draft.status !== "approved" && draft.status !== "rejected" && (
-                <>
-                  <ActionBtn color={T.green}  onClick={onApprove} label="Approve" />
-                  <ActionBtn color={T.red}    onClick={onReject}  label="Reject" />
-                  <ActionBtn color={T.purple} onClick={onEdit}    label="Edit" />
-                </>
-              )}
-              {(draft.status === "approved" || draft.status === "rejected") && (
-                <ActionBtn color={T.textDim} onClick={onReset} label="Reset" />
-              )}
-            </div>
-          )}
         </div>
+
+        {!isMobile && (
+          <div style={{ marginLeft: "auto", display: "flex", gap: 6, flexShrink: 0 }}>
+            {draft.status !== "approved" && draft.status !== "rejected" && (
+              <>
+                <ActionBtn color={T.green}  onClick={onApprove} label="Approve" />
+                <ActionBtn color={T.red}    onClick={onReject}  label="Reject" />
+                <ActionBtn color={T.purple} onClick={onEdit}    label="Edit" />
+              </>
+            )}
+            {(draft.status === "approved" || draft.status === "rejected") && (
+              <ActionBtn color={T.textDim} onClick={onReset} label="Reset" />
+            )}
+          </div>
+        )}
       </div>
 
       {/* Body */}
-      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: isMobile ? 13.5 : 14, lineHeight: 1.7, color: T.text, whiteSpace: "pre-wrap", fontWeight: 400, letterSpacing: "-0.01em" }}>
+      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: isMobile ? 13.5 : 14, lineHeight: 1.7, color: T.text, whiteSpace: "pre-wrap", fontWeight: 400 }}>
         {draft.text}
       </div>
 
       {/* Footer */}
-      <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+      <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", gap: 12 }}>
           {sources.map(source => <SrcChip key={source} source={source} />)}
         </div>
         <span style={{
-          fontFamily: "'IBM Plex Mono',monospace", fontSize: 10,
+          fontFamily: "'IBM Plex Mono',monospace",
+          fontSize: 10,
           color: overLimit ? T.red : draft.text.length > 240 ? T.yellow : T.textDim,
           display: "flex", alignItems: "center", gap: 5,
           fontVariantNumeric: "tabular-nums", letterSpacing: "0.01em",
         }}>
-          {overLimit && <span>⚠️</span>}
+          {overLimit && <span>⚠</span>}
           {draft.text.length}/280
           <span style={{ color: T.border2 }}>·</span>
           {Math.ceil(draft.text.split(" ").length / 3)}s read
@@ -104,7 +108,7 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
 
       {/* Mobile action buttons */}
       {isMobile && (
-        <div style={{ display: "flex", gap: 8, width: "100%", marginTop: 12 }}>
+        <div style={{ display: "flex", gap: 6, width: "100%", marginTop: 12 }}>
           {draft.status !== "approved" && draft.status !== "rejected" && (
             <>
               <ActionBtn color={T.green}  onClick={onApprove} label="Approve" fullWidth />
@@ -124,12 +128,14 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
           href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(draft.text)}`}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 10,
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10,
             padding: "7px 14px", background: "#000", color: "#fff", borderRadius: 6,
             fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
-            textDecoration: "none" }}
+            textDecoration: "none",
+          }}
         >
-          𝕏 Post to X
+          X Post to X
         </a>
       )}
 
@@ -140,14 +146,18 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
             type="datetime-local"
             value={scheduleTime}
             onChange={e => setScheduleTime(e.target.value)}
-            style={{ background: T.card, border: `1px solid ${T.border2}`, color: T.text,
+            style={{
+              background: T.card, border: `1px solid ${T.border2}`, color: T.text,
               borderRadius: 6, padding: "6px 10px", fontFamily: "'IBM Plex Mono',monospace",
-              fontSize: 11, outline: "none" }}
+              fontSize: 11, outline: "none",
+            }}
           />
           <button
             onClick={() => { onSchedule(scheduleTime); setShowScheduler(false); }}
-            style={{ background: T.purple, color: "#fff", border: "none", borderRadius: 6,
-              padding: "6px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer" }}
+            style={{
+              background: T.purple, color: "#fff", border: "none", borderRadius: 6,
+              padding: "6px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer",
+            }}
           >
             Set
           </button>
@@ -156,12 +166,13 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
 
       <button
         onClick={() => draft.scheduledAt ? onCancelSchedule() : setShowScheduler(!showScheduler)}
-        style={{ marginTop: 8, background: "none", border: `1px solid ${T.border2}`,
+        style={{
+          marginTop: 8, background: "none", border: `1px solid ${T.border2}`,
           color: draft.scheduledAt ? T.orange : T.textDim, borderRadius: 6,
-          padding: "5px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer" }}
+          padding: "5px 12px", fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, cursor: "pointer",
+        }}
       >
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        {draft.scheduledAt ? "CANCEL SCHEDULE" : "SCHEDULE POST"}
+        {draft.scheduledAt ? "🔔 Cancel reminder" : "🔔 Schedule reminder"}
       </button>
     </div>
   );
