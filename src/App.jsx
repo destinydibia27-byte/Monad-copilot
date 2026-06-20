@@ -161,11 +161,9 @@ useEffect(() => {
             }}>▲</div>
 
             <div style={{ flex: "1 1 0", minWidth: 0 }}>
-              <h1 style={{
-                fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 18 : 21, fontWeight: 800,
-                color: "#fff", letterSpacing: "-0.04em", lineHeight: 1,
-              }}>Monad CT Co-Pilot</h1>
-              <div style={{
+          <h1 style={{ fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 18 : 21, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, margin: 0 }}>
+            <span style={{ color: "#fff" }}>Monad CT </span><span style={{ color: T.purple }}>Co-Pilot</span>
+          </h1>
                 fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5,
                 color: T.textDim, letterSpacing: "0.06em", marginTop: 5,
                 display: "flex", alignItems: "center", gap: 6,
