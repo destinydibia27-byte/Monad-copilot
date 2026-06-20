@@ -161,9 +161,11 @@ useEffect(() => {
             }}>▲</div>
 
             <div style={{ flex: "1 1 0", minWidth: 0 }}>
-          <h1 style={{ fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 18 : 21, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, margin: 0 }}>
-            <span style={{ color: "#fff" }}>Monad CT </span><span style={{ color: T.purple }}>Co-Pilot</span>
-          </h1>
+              <h1 style={{
+                fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 18 : 21, fontWeight: 800,
+                color: "#fff", letterSpacing: "-0.04em", lineHeight: 1,
+              }}>Monad CT Co-Pilot</h1>
+              <div style={{
                 fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5,
                 color: T.textDim, letterSpacing: "0.06em", marginTop: 5,
                 display: "flex", alignItems: "center", gap: 6,
@@ -194,6 +196,7 @@ useEffect(() => {
               color: T.purple, border: `1px solid ${T.purple}40`,
               padding: "3px 7px", borderRadius: 4, flexShrink: 0,
             }}>v1 MVP</span>
+          </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 10, width: isMobile ? "100%" : "auto" }}>
             {/* User avatar + sign out */}
