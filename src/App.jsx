@@ -164,7 +164,7 @@ useEffect(() => {
               <h1 style={{
                 fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 18 : 21, fontWeight: 800,
                 color: "#fff", letterSpacing: "-0.04em", lineHeight: 1,
-              }}>Monad CT Co-Pilot</h1>
+              }}>Monad CT <span style={{ color: "#7c3aed" }}>Co-Pilot</span></h1>
               <div style={{
                 fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5,
                 color: T.textDim, letterSpacing: "0.06em", marginTop: 5,
