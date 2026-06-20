@@ -155,10 +155,10 @@ useEffect(() => {
             <div style={{ width: 34, height: 34, flexShrink: 0 }}>
               <svg viewBox="0 0 34 34" width="34" height="34" xmlns="http://www.w3.org/2000/svg">
                 <rect width="34" height="34" rx="8" fill="#0F0D30"/>
-                <rect width="34" height="34" rx="8" fill="none" stroke="#ffffff" stroke-width="0.75" stroke-opacity="0.07"/>
-                <polygon points="17,6 28,25 6,25" fill="none" stroke="#6D5FD8" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                <rect width="34" height="34" rx="8" fill="none" stroke="#ffffff" strokeWidth="0.75" strokeOpacity="0.07"/>
+                <polygon points="17,6 28,25 6,25" fill="none" stroke="#6D5FD8" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round"/>
                 <polygon points="17,12 23,22 11,22" fill="#ffffff"/>
-                <rect x="12" y="27" width="10" height="2" rx="1" fill="#6D5FD8" fill-opacity="0.55"/>
+                <rect x="12" y="27" width="10" height="2" rx="1" fill="#6D5FD8" fillOpacity="0.55"/>
               </svg>
             </div>
 
@@ -166,7 +166,7 @@ useEffect(() => {
               <h1 style={{
                 fontFamily: "'Syne',sans-serif", fontSize: isMobile ? 18 : 21, fontWeight: 800,
                 color: "#fff", letterSpacing: "-0.04em", lineHeight: 1,
-              }}>Monad CT <span style={{ color: "#7c3aed" }}>Co-Pilot</span></h1>
+              }}>Monad CT Co-Pilot</h1>
               <div style={{
                 fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5,
                 color: T.textDim, letterSpacing: "0.06em", marginTop: 5,
