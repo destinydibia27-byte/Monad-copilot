@@ -129,7 +129,6 @@ export function DraftCard({ draft, onApprove, onReject, onReset, onEdit, updates
             fontFamily: "'IBM Plex Mono',monospace", fontSize: 11, fontWeight: 500,
             textDecoration: "none" }}
           X Post to X
-          𝕏 Post to X
         </a>
       )}
 
