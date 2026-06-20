@@ -5,14 +5,10 @@ import { useIsMobile } from "../hooks/useWindowWidth";
 export function GenPanel({ selectedCount, onGenerate, onCancel, generating }) {
   const isMobile = useIsMobile();
   const [input, setInput] = useState("");
-  const [activeTab, setActiveTab] = useState("github"); // "github" | "custom"
+  const [activeTab, setActiveTab] = useState("github");
 
   const handleGenerate = () => {
-    if (activeTab === "custom") {
-      onGenerate(input, true); // pass flag so caller knows it's custom context
-    } else {
-      onGenerate(input);
-    }
+    onGenerate(input);
   };
 
   const canGenerate = activeTab === "github"
@@ -25,21 +21,14 @@ export function GenPanel({ selectedCount, onGenerate, onCancel, generating }) {
       borderRadius: 12, padding: isMobile ? "18px 16px" : "22px 24px", marginBottom: 20,
       animation: "cardSlideIn 0.25s ease-out",
     }}>
-
-      {/* Title */}
       <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 16, fontWeight: 700, color: "#fff", marginBottom: 4, letterSpacing: "-0.02em" }}>
         Generate Tweet Drafts
       </div>
       <div style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim, letterSpacing: "0.06em", marginBottom: 16 }}>
         AI-POWERED · MONAD ECOSYSTEM
       </div>
-
-      {/* Tabs */}
       <div style={{ display: "flex", gap: 0, marginBottom: 16, borderBottom: `1px solid ${T.border}` }}>
-        {[
-          { key: "github", label: "GitHub" },
-          { key: "custom", label: "Custom Context" },
-        ].map(tab => (
+        {[{ key: "github", label: "GitHub" }, { key: "custom", label: "Custom Context" }].map(tab => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
@@ -51,37 +40,27 @@ export function GenPanel({ selectedCount, onGenerate, onCancel, generating }) {
               borderBottom: activeTab === tab.key ? `2px solid ${T.purple}` : "2px solid transparent",
               transition: "color 0.15s",
             }}
-          >
-            {tab.label}
-          </button>
+          >{tab.label}</button>
         ))}
       </div>
-
-      {/* GitHub Tab */}
       {activeTab === "github" && (
         <div>
           <div style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim, letterSpacing: "0.06em", marginBottom: 12 }}>
-            {selectedCount > 0
-              ? `${selectedCount} SIGNAL(S) SELECTED AS CONTEXT — or add custom notes below`
-              : "SELECT ECOSYSTEM SIGNALS BELOW · or describe a topic"}
+            {selectedCount > 0 ? `${selectedCount} SIGNAL(S) SELECTED AS CONTEXT` : "SELECT ECOSYSTEM SIGNALS BELOW · or describe a topic"}
           </div>
           <textarea
             placeholder="e.g. Monad just hit a new TPS record — write punchy founder-focused tweets..."
             value={input}
             onChange={e => setInput(e.target.value)}
             style={{
-              width: "100%", background: T.surface,
-              border: `1px solid ${T.border2}`, borderRadius: 8,
-              color: T.text, fontFamily: "'Inter',sans-serif", fontSize: 13.5,
-              lineHeight: 1.65, letterSpacing: "-0.01em",
-              padding: "12px 14px", minHeight: isMobile ? 100 : 80,
+              width: "100%", background: T.surface, border: `1px solid ${T.border2}`, borderRadius: 8,
+              color: T.text, fontFamily: "'Inter',sans-serif", fontSize: 13.5, lineHeight: 1.65,
+              letterSpacing: "-0.01em", padding: "12px 14px", minHeight: isMobile ? 100 : 80,
               outline: "none", resize: "vertical", boxSizing: "border-box",
             }}
           />
         </div>
       )}
-
-      {/* Custom Context Tab */}
       {activeTab === "custom" && (
         <div>
           <div style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim, letterSpacing: "0.06em", marginBottom: 12 }}>
@@ -92,11 +71,9 @@ export function GenPanel({ selectedCount, onGenerate, onCancel, generating }) {
             value={input}
             onChange={e => setInput(e.target.value)}
             style={{
-              width: "100%", background: T.surface,
-              border: `1px solid ${T.border2}`, borderRadius: 8,
-              color: T.text, fontFamily: "'Inter',sans-serif", fontSize: 13.5,
-              lineHeight: 1.65, letterSpacing: "-0.01em",
-              padding: "12px 14px", minHeight: isMobile ? 120 : 100,
+              width: "100%", background: T.surface, border: `1px solid ${T.border2}`, borderRadius: 8,
+              color: T.text, fontFamily: "'Inter',sans-serif", fontSize: 13.5, lineHeight: 1.65,
+              letterSpacing: "-0.01em", padding: "12px 14px", minHeight: isMobile ? 120 : 100,
               outline: "none", resize: "vertical", boxSizing: "border-box",
             }}
           />
@@ -105,42 +82,29 @@ export function GenPanel({ selectedCount, onGenerate, onCancel, generating }) {
           </div>
         </div>
       )}
-
-      {/* Actions */}
       <div style={{
         display: "flex", gap: 8, marginTop: 14,
         flexDirection: isMobile ? "column" : "row",
         justifyContent: isMobile ? "stretch" : "flex-end",
       }}>
-        <button
-          onClick={onCancel}
-          style={{
-            background: "transparent", border: `1px solid ${T.border}`,
-            color: T.textDim, borderRadius: 7,
-            padding: isMobile ? "12px 0" : "9px 16px",
-            fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 450,
-            letterSpacing: "-0.01em", cursor: "pointer",
-            order: isMobile ? 2 : 0,
-          }}
-        >Cancel</button>
-
+        <button onClick={onCancel} style={{
+          background: "transparent", border: `1px solid ${T.border}`, color: T.textDim, borderRadius: 7,
+          padding: isMobile ? "12px 0" : "9px 16px", fontFamily: "'Inter',sans-serif", fontSize: 12,
+          fontWeight: 450, letterSpacing: "-0.01em", cursor: "pointer", order: isMobile ? 2 : 0,
+        }}>Cancel</button>
         <button
           onClick={handleGenerate}
           disabled={generating || !canGenerate}
           style={{
             background: generating || !canGenerate ? T.textDim : T.purple,
             border: "none", color: "#fff", borderRadius: 7,
-            padding: isMobile ? "12px 0" : "9px 20px",
-            fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 500,
-            letterSpacing: "-0.01em", transition: "opacity 0.15s",
-            cursor: generating || !canGenerate ? "not-allowed" : "pointer",
-            order: isMobile ? 1 : 0,
+            padding: isMobile ? "12px 0" : "9px 20px", fontFamily: "'Inter',sans-serif", fontSize: 12,
+            fontWeight: 500, letterSpacing: "-0.01em", transition: "opacity 0.15s",
+            cursor: generating || !canGenerate ? "not-allowed" : "pointer", order: isMobile ? 1 : 0,
           }}
           onMouseEnter={e => { if (!generating && canGenerate) e.currentTarget.style.opacity = "0.85"; }}
           onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-        >
-          {generating ? "Generating..." : "Generate 2 Drafts →"}
-        </button>
+        >{generating ? "Generating..." : "Generate 2 Drafts →"}</button>
       </div>
     </div>
   );
