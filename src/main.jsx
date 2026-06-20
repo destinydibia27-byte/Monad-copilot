@@ -61,9 +61,9 @@ function LoginScreen() {
       fontFamily: "'Inter', sans-serif", padding: "16px",
     }}>
       <div style={{
-        width: "100%", maxWidth: 360,
+        width: "100%", maxWidth: 300,
         background: T.card, border: `1px solid ${T.border}`,
-        borderRadius: 12, padding: "28px 24px",
+        borderRadius: 12, padding: "20px 18px",
         boxShadow: "0 8px 40px rgba(0,0,0,0.5)",
       }}>
         <div style={{ textAlign: "center", marginBottom: 28 }}>
