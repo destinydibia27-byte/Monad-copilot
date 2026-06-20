@@ -103,7 +103,7 @@ useEffect(() => {
   const timeStr = time.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
 
   return (
-    <div style={{ minHeight: "100vh", background: T.bg, color: T.text, position: "relative" }}>
+    <div style={{ minHeight: "100vh", background: T.bg, color: T.text, position: "relative", overflowX: "hidden" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:ital,wght@0,400;0,450;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -142,7 +142,7 @@ useEffect(() => {
 
         {/* ── HEADER ── */}
         <header style={{
-          padding: isMobile ? "18px 0 16px" : "22px 0 20px",
+          padding: isMobile ? "14px 0 12px" : "22px 0 20px",
           borderBottom: `1px solid ${T.border}`,
           marginBottom: isMobile ? 20 : 28,
           display: "flex",
@@ -245,7 +245,7 @@ useEffect(() => {
         </header>
 
         {/* ── STAT CARDS ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10, marginBottom: 28 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(120px,1fr))", gap: 10, marginBottom: 28 }}>
           {[
             { label: "Pending Review", val: counts.pending,          color: T.purple, sub: "awaiting action",      filter: "pending"  },
             { label: "Approved",       val: counts.approved,         color: T.green,  sub: "ready to post",        filter: "approved" },
