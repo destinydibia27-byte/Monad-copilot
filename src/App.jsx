@@ -152,13 +152,15 @@ useEffect(() => {
           gap: isMobile ? 14 : 16,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14, width: isMobile ? "100%" : "auto" }}>
-            <div style={{
-              width: 34, height: 34, borderRadius: 9,
-              background: `linear-gradient(135deg, ${T.purple} 0%, ${T.purpleD} 100%)`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 15, flexShrink: 0,
-              boxShadow: `0 0 0 1px ${T.purple}40, 0 4px 16px ${T.purple}30`,
-            }}>▲</div>
+            <div style={{ width: 34, height: 34, flexShrink: 0 }}>
+              <svg viewBox="0 0 34 34" width="34" height="34" xmlns="http://www.w3.org/2000/svg">
+                <rect width="34" height="34" rx="8" fill="#0F0D30"/>
+                <rect width="34" height="34" rx="8" fill="none" stroke="#ffffff" stroke-width="0.75" stroke-opacity="0.07"/>
+                <polygon points="17,6 28,25 6,25" fill="none" stroke="#6D5FD8" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+                <polygon points="17,12 23,22 11,22" fill="#ffffff"/>
+                <rect x="12" y="27" width="10" height="2" rx="1" fill="#6D5FD8" fill-opacity="0.55"/>
+              </svg>
+            </div>
 
             <div style={{ flex: "1 1 0", minWidth: 0 }}>
               <h1 style={{
