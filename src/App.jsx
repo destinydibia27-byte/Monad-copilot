@@ -138,7 +138,7 @@ useEffect(() => {
         />
       )}
 
-      <div style={{ position: "relative", zIndex: 1, maxWidth: 1140, margin: "0 auto", padding: isMobile ? "0 16px" : "0 24px" }}>
+      <div style={{ position: "relative", zIndex: 1, maxWidth: 1140, margin: "0 auto", padding: isMobile ? "0 16px" : "0 48px" }}>
 
         {/* ── HEADER ── */}
         <header style={{
