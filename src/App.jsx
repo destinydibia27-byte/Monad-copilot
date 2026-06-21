@@ -148,7 +148,7 @@ useEffect(() => {
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           alignItems: isMobile ? "flex-start" : "center",
-          justifyContent: "space-between",
+        justifyContent: "flex-start", gap: 40,
           gap: isMobile ? 14 : 16,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14, width: isMobile ? "100%" : "auto" }}>
