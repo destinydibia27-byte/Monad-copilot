@@ -142,7 +142,7 @@ useEffect(() => {
 
         {/* ── HEADER ── */}
         <header style={{
-          padding: isMobile ? "14px 0 12px" : "22px 0 20px",
+          padding: isMobile ? "14px 0 12px" : "22px 0 20px 24px",
           borderBottom: `1px solid ${T.border}`,
           marginBottom: isMobile ? 20 : 28,
           display: "flex",
