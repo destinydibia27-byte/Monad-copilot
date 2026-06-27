@@ -1,6 +1,4 @@
-import { supabase } from "./main";
 import { useState, useEffect } from "react";
-
 import { T, CATEGORIES, SOURCES, MOBILE } from "./constants/theme";
 import { GITHUB_SOURCES } from "./constants/github";
 import { useIsMobile } from "./hooks/useWindowWidth";
@@ -15,11 +13,8 @@ import { Toast, Dot, PillBtn, GeneratingBar, SrcChip } from "./components/UI";
 
 export default function MonadCoPilot() {
   const isMobile = useIsMobile();
-  const [user, setUser] = useState(null);
-useEffect(() => {
-  supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null));
-}, []);
-const signOut = () => supabase.auth.signOut();
+  const { user } = useUser();
+  const { signOut } = useClerk();
 
   const [activeTab,    setActiveTab]    = useState("drafts");
   const [filterCat,    setFilterCat]    = useState("All");
@@ -30,6 +25,7 @@ const signOut = () => supabase.auth.signOut();
   const [toast,        setToast]        = useState(null);
   const [selectedIds,  setSelectedIds]  = useState([]);
   const [time,         setTime]         = useState(new Date());
+  const [showProfile,  setShowProfile]  = useState(false);
 
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 1000);
@@ -301,25 +297,127 @@ const signOut = () => supabase.auth.signOut();
             <span style={{ fontVariantNumeric: "tabular-nums" }}>{timeStr}</span>
           </div>
 
-          {/* Actions: avatar + sign out + generate */}
-          <div className="header-actions">
-            {user?.imageUrl && (
-              <img src={user.imageUrl} alt="avatar"
-                style={{ width: 26, height: 26, borderRadius: "50%", border: `1px solid ${T.border2}`, flexShrink: 0 }}
-              />
-            )}
-            <button
-              onClick={() => signOut()}
-              style={{
-                background: "none", border: `1px solid ${T.border2}`, color: T.textDim,
-                padding: "4px 8px", borderRadius: 6, fontFamily: "'IBM Plex Mono',monospace",
-                fontSize: 9, letterSpacing: "0.06em", cursor: "pointer",
-                transition: "color 0.15s, border-color 0.15s", whiteSpace: "nowrap", flexShrink: 0,
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = T.text; e.currentTarget.style.borderColor = T.textDim; }}
-              onMouseLeave={e => { e.currentTarget.style.color = T.textDim; e.currentTarget.style.borderColor = T.border2; }}
-            >OUT</button>
+          {/* Actions: profile dropdown + generate */}
+          <div className="header-actions" style={{ position: "relative" }}>
             {generating && <Dot color={T.purple} pulse />}
+
+            {/* Profile avatar button */}
+            <button
+              onClick={() => setShowProfile(p => !p)}
+              style={{
+                background: "none", border: `1px solid ${T.border2}`,
+                borderRadius: "50%", padding: 0, cursor: "pointer",
+                width: 32, height: 32, flexShrink: 0, overflow: "hidden",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "border-color 0.15s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = T.purple}
+              onMouseLeave={e => e.currentTarget.style.borderColor = T.border2}
+            >
+              {user?.user_metadata?.avatar_url ? (
+                <img src={user.user_metadata.avatar_url} alt="avatar"
+                  style={{ width: 32, height: 32, borderRadius: "50%", display: "block" }}
+                />
+              ) : (
+                <span style={{ fontFamily: "'Syne',sans-serif", fontSize: 13, fontWeight: 700, color: T.purple }}>
+                  {user?.email?.[0]?.toUpperCase() ?? "U"}
+                </span>
+              )}
+            </button>
+
+            {/* Dropdown */}
+            {showProfile && (
+              <>
+                {/* Backdrop */}
+                <div
+                  onClick={() => setShowProfile(false)}
+                  style={{ position: "fixed", inset: 0, zIndex: 49 }}
+                />
+                <div style={{
+                  position: "absolute", top: "calc(100% + 10px)", right: 0,
+                  zIndex: 50, minWidth: 220,
+                  background: "#13131a", border: `1px solid ${T.border}`,
+                  borderRadius: 12, padding: "4px",
+                  boxShadow: "0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)",
+                  animation: "cardSlideIn 0.15s ease",
+                }}>
+                  {/* User info */}
+                  <div style={{
+                    padding: "12px 14px 10px",
+                    borderBottom: `1px solid ${T.border}`,
+                    marginBottom: 4,
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      {user?.user_metadata?.avatar_url ? (
+                        <img src={user.user_metadata.avatar_url} alt="avatar"
+                          style={{ width: 36, height: 36, borderRadius: "50%", border: `1px solid ${T.border2}` }}
+                        />
+                      ) : (
+                        <div style={{
+                          width: 36, height: 36, borderRadius: "50%",
+                          background: `${T.purple}20`, border: `1px solid ${T.purple}40`,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontFamily: "'Syne',sans-serif", fontSize: 15, fontWeight: 700, color: T.purple,
+                        }}>
+                          {user?.email?.[0]?.toUpperCase() ?? "U"}
+                        </div>
+                      )}
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{
+                          fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
+                          color: T.text, letterSpacing: "-0.01em",
+                          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        }}>
+                          {user?.user_metadata?.full_name || user?.user_metadata?.name || "User"}
+                        </div>
+                        <div style={{
+                          fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5,
+                          color: T.textDim, letterSpacing: "0.02em", marginTop: 2,
+                          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        }}>
+                          {user?.email}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Provider badge */}
+                  <div style={{ padding: "6px 14px 4px" }}>
+                    <span style={{
+                      fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, letterSpacing: "0.08em",
+                      color: T.textDim, textTransform: "uppercase",
+                    }}>
+                      Signed in via {user?.app_metadata?.provider ?? "oauth"}
+                    </span>
+                  </div>
+
+                  {/* Sign out */}
+                  <button
+                    onClick={() => { setShowProfile(false); signOut(); }}
+                    style={{
+                      width: "100%", background: "none",
+                      border: "none", borderRadius: 8,
+                      padding: "10px 14px", marginTop: 2,
+                      display: "flex", alignItems: "center", gap: 10,
+                      cursor: "pointer", transition: "background 0.12s",
+                      fontFamily: "'Inter',sans-serif", fontSize: 13,
+                      fontWeight: 450, color: "#f87171",
+                      letterSpacing: "-0.01em", textAlign: "left",
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = "rgba(248,113,113,0.08)"}
+                    onMouseLeave={e => e.currentTarget.style.background = "none"}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                      <polyline points="16 17 21 12 16 7"/>
+                      <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Sign Out
+                  </button>
+                </div>
+              </>
+            )}
+
             <button className="gen-btn" onClick={() => setShowGenPanel(true)}>
               + Generate
             </button>
