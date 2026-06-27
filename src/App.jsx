@@ -13,7 +13,6 @@ import { Toast, Dot, PillBtn, GeneratingBar, SrcChip } from "./components/UI";
 
 export default function MonadCoPilot() {
   const isMobile = useIsMobile();
-  const { user } = useUser();
   const { signOut } = useClerk();
 
   const [activeTab,    setActiveTab]    = useState("drafts");
