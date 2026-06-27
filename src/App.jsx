@@ -584,6 +584,45 @@ export default function MonadCoPilot({ session }) {
               />
             )}
             {generating && <GeneratingBar />}
+
+            {/* Status filter pills */}
+            <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap" }}>
+              {[
+                { key: "All",      label: "All",      color: theme.textSub },
+                { key: "pending",  label: "Pending",  color: T.purple      },
+                { key: "approved", label: "Approved", color: T.green       },
+                { key: "edited",   label: "Edited",   color: T.yellow      },
+                { key: "rejected", label: "Rejected", color: T.red         },
+              ].map(({ key, label, color }) => {
+                const active = filterStatus === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setFilterStatus(key)}
+                    style={{
+                      background: active ? `${color}18` : "transparent",
+                      border: `1px solid ${active ? color : theme.border}`,
+                      color: active ? color : theme.textDim,
+                      borderRadius: 6, padding: "5px 12px",
+                      fontFamily: "'IBM Plex Mono',monospace", fontSize: 10,
+                      fontWeight: active ? 500 : 400,
+                      letterSpacing: "0.04em", textTransform: "uppercase",
+                      cursor: "pointer", transition: "all 0.15s",
+                    }}
+                    onMouseEnter={e => { if (!active) { e.currentTarget.style.borderColor = theme.border2; e.currentTarget.style.color = theme.textSub; }}}
+                    onMouseLeave={e => { if (!active) { e.currentTarget.style.borderColor = theme.border;  e.currentTarget.style.color = theme.textDim; }}}
+                  >
+                    {label}
+                    <span style={{
+                      marginLeft: 6, fontVariantNumeric: "tabular-nums",
+                      opacity: 0.7,
+                    }}>
+                      {key === "All" ? drafts.length : drafts.filter(d => d.status === key).length}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {filteredDrafts.length === 0 ? (
                 <div style={{ textAlign: "center", padding: "56px 0", fontFamily: "'Inter',sans-serif", fontSize: 13, color: theme.textDim, letterSpacing: "-0.01em" }}>
