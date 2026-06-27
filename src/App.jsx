@@ -299,11 +299,8 @@ export default function MonadCoPilot({ session }) {
           right: 0;
           z-index: 50;
           min-width: 220px;
-          background: theme.card;
-          border: 1px solid theme.border;
           border-radius: 12px;
           padding: 4px;
-          box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
           animation: cardSlideIn 0.15s ease;
         }
       `}</style>
@@ -386,7 +383,11 @@ export default function MonadCoPilot({ session }) {
             {showProfile && (
               <>
                 <div onClick={() => setShowProfile(false)} style={{ position: "fixed", inset: 0, zIndex: 49 }} />
-                <div className="profile-dropdown">
+                <div className="profile-dropdown" style={{
+                  background: theme.card,
+                  border: `1px solid ${theme.border}`,
+                  boxShadow: darkMode ? "0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)" : "0 16px 48px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.06)",
+                }}>
                   {/* User info */}
                   <div style={{ padding: "12px 14px 10px", borderBottom: `1px solid theme.border`, marginBottom: 4 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
