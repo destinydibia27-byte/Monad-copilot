@@ -26,7 +26,35 @@ export default function MonadCoPilot({ session }) {
   const [selectedIds,  setSelectedIds]  = useState([]);
   const [time,         setTime]         = useState(new Date());
   const [showProfile,  setShowProfile]  = useState(false);
-  const [darkMode,     setDarkMode]     = useState(true);
+  const [darkMode, setDarkMode] = useState(true);
+
+  useEffect(() => {
+    const light = {
+      bg:      "#F4F3FF",
+      surface: "#EEEDF9",
+      card:    "#FFFFFF",
+      card2:   "#F8F7FF",
+      border:  "#E0DEFA",
+      border2: "#CCC9F5",
+      text:    "#1A1840",
+      textSub: "#4B4880",
+      textDim: "#8885B0",
+    };
+    const dark = {
+      bg:      "#0B0B0F",
+      surface: "#0F0F15",
+      card:    "#13131A",
+      card2:   "#17171F",
+      border:  "#1C1C28",
+      border2: "#242435",
+      text:    "#E4E2FF",
+      textSub: "#9896B8",
+      textDim: "#5C5A7A",
+    };
+    const colors = darkMode ? dark : light;
+    Object.assign(T, colors);
+    document.body.style.background = colors.bg;
+  }, [darkMode]);
 
   // ── Clock ─────────────────────────────────────────────────
   useEffect(() => {
@@ -96,21 +124,7 @@ export default function MonadCoPilot({ session }) {
   };
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: theme.bg,
-      color: theme.text,
-      position: "relative",
-      "--c-bg":      theme.bg,
-      "--c-surface": theme.surface,
-      "--c-card":    theme.card,
-      "--c-border":  theme.border,
-      "--c-border2": theme.border2,
-      "--c-text":    theme.text,
-      "--c-textSub": theme.textSub,
-      "--c-textDim": theme.textDim,
-      "--c-purple":  theme.purple,
-    }}>
+    <div style={{ minHeight: "100vh", background: theme.bg, color: theme.text, position: "relative" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:ital,wght@0,400;0,450;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
