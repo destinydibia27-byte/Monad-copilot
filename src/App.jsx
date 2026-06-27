@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { T, CATEGORIES, SOURCES, MOBILE } from "./constants/theme";
 import { GITHUB_SOURCES } from "./constants/github";
 import { useIsMobile } from "./hooks/useWindowWidth";
+  const [user, setUser] = useState(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const signOut = () => import("./main").then(m => m.supabase.auth.signOut());
+  useEffect(() => { import("./main").then(m => m.supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null))); }, []);
 import { useDrafts } from "./hooks/useDrafts";
 import { useGitHubUpdates } from "./hooks/useGitHubUpdates";
 import { StatCard } from "./components/StatCard";
@@ -13,6 +17,8 @@ import { Toast, Dot, PillBtn, GeneratingBar, SrcChip } from "./components/UI";
 
 export default function MonadCoPilot() {
   const isMobile = useIsMobile();
+  const [user, setUser] = useState(null);
+  const signOut = () => import("./main").then(m => m.supabase.auth.signOut());
 
   const [activeTab,    setActiveTab]    = useState("drafts");
   const [filterCat,    setFilterCat]    = useState("All");
@@ -23,7 +29,6 @@ export default function MonadCoPilot() {
   const [toast,        setToast]        = useState(null);
   const [selectedIds,  setSelectedIds]  = useState([]);
   const [time,         setTime]         = useState(new Date());
-  const [showProfile,  setShowProfile]  = useState(false);
 
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 1000);
