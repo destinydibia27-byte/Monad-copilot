@@ -1,5 +1,6 @@
+import { supabase } from "./main";
 import { useState, useEffect } from "react";
-import { useUser, useClerk } from "@clerk/clerk-react";
+
 import { T, CATEGORIES, SOURCES, MOBILE } from "./constants/theme";
 import { GITHUB_SOURCES } from "./constants/github";
 import { useIsMobile } from "./hooks/useWindowWidth";
@@ -14,8 +15,11 @@ import { Toast, Dot, PillBtn, GeneratingBar, SrcChip } from "./components/UI";
 
 export default function MonadCoPilot() {
   const isMobile = useIsMobile();
-  const { user } = useUser();
-  const { signOut } = useClerk();
+  const [user, setUser] = useState(null);
+useEffect(() => {
+  supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null));
+}, []);
+const signOut = () => supabase.auth.signOut();
 
   const [activeTab,    setActiveTab]    = useState("drafts");
   const [filterCat,    setFilterCat]    = useState("All");
@@ -443,7 +447,7 @@ export default function MonadCoPilot() {
                   onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
                   onMouseLeave={e => e.currentTarget.style.opacity = "1"}
                 >
-                  Generate from {selectedIds.length} selected ->
+                  Generate from {selectedIds.length} selected →
                 </button>
               )}
             </div>
