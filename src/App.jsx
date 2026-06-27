@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
-import { T, CATEGORIES, SOURCES, MOBILE } from "./constants/theme";
+import { supabase } from "./main";
+import { T, CATEGORIES, SOURCES } from "./constants/theme";
 import { GITHUB_SOURCES } from "./constants/github";
 import { useIsMobile } from "./hooks/useWindowWidth";
-  const [user, setUser] = useState(null);
-  const [showProfile, setShowProfile] = useState(false);
-  const signOut = () => supabase.auth.signOut();
-  useEffect(() => { supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null)); }, []);
 import { useDrafts } from "./hooks/useDrafts";
 import { useGitHubUpdates } from "./hooks/useGitHubUpdates";
 import { StatCard } from "./components/StatCard";
@@ -13,15 +10,14 @@ import { DraftCard } from "./components/DraftCard";
 import { UpdateRow } from "./components/UpdateRow";
 import { EditModal } from "./components/EditModal";
 import { GenPanel } from "./components/GenPanel";
-import { Toast, Dot, PillBtn, GeneratingBar, SrcChip } from "./components/UI";
+import { Toast, Dot, GeneratingBar, SrcChip } from "./components/UI";
 
-export default function MonadCoPilot() {
-  const isMobile = useIsMobile();
-  const [user, setUser] = useState(null);
-  const signOut = () => supabase.auth.signOut();
+export default function MonadCoPilot({ session }) {
+  const isMobile  = useIsMobile();
+  const user       = session?.user ?? null;
 
+  // ── UI State ──────────────────────────────────────────────
   const [activeTab,    setActiveTab]    = useState("drafts");
-  const [filterCat,    setFilterCat]    = useState("All");
   const [filterStatus, setFilterStatus] = useState("All");
   const [editingDraft, setEditingDraft] = useState(null);
   const [generating,   setGenerating]   = useState(false);
@@ -29,20 +25,25 @@ export default function MonadCoPilot() {
   const [toast,        setToast]        = useState(null);
   const [selectedIds,  setSelectedIds]  = useState([]);
   const [time,         setTime]         = useState(new Date());
+  const [showProfile,  setShowProfile]  = useState(false);
 
+  // ── Clock ─────────────────────────────────────────────────
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
 
+  // ── Toast ─────────────────────────────────────────────────
   const showToast = (msg, type = "success") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 2800);
   };
 
-  const { drafts, loading: draftsLoading, updateStatus, saveEdit, generate } = useDrafts(showToast);
+  // ── Data ─────────────────────────────────────────────────
+  const { drafts, loading: draftsLoading, updateStatus, saveEdit, generate, scheduleReminder, cancelReminder } = useDrafts(showToast);
   const { updates: allUpdates, loading: githubLoading, error: githubError } = useGitHubUpdates();
 
+  // ── Helpers ───────────────────────────────────────────────
   const toggleSelect = id =>
     setSelectedIds(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id]);
 
@@ -50,7 +51,7 @@ export default function MonadCoPilot() {
     setGenerating(true);
     setShowGenPanel(false);
     const selected = allUpdates.filter(u => selectedIds.includes(u.id));
-    const context = selected.length > 0
+    const context  = selected.length > 0
       ? selected.map(u => `[${u.source} · ${u.category}] ${u.text}`).join("\n")
       : customInput;
     const ok = await generate({ context, selectedIds, allUpdates });
@@ -59,8 +60,7 @@ export default function MonadCoPilot() {
   };
 
   const filteredDrafts = drafts.filter(d => {
-    if (filterCat    !== "All" && d.category !== filterCat)    return false;
-    if (filterStatus !== "All" && d.status   !== filterStatus) return false;
+    if (filterStatus !== "All" && d.status !== filterStatus) return false;
     return true;
   });
 
@@ -72,8 +72,14 @@ export default function MonadCoPilot() {
   };
 
   const highSignal = allUpdates.filter(u => u.weight >= 8).length;
-  const dateStr = time.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-  const timeStr = time.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+  const dateStr    = time.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  const timeStr    = time.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+
+  const avatarUrl  = user?.user_metadata?.avatar_url;
+  const fullName   = user?.user_metadata?.full_name || user?.user_metadata?.name || "User";
+  const email      = user?.email ?? "";
+  const provider   = user?.app_metadata?.provider ?? "oauth";
+  const initial    = email[0]?.toUpperCase() ?? "U";
 
   return (
     <div style={{ minHeight: "100vh", background: T.bg, color: T.text, position: "relative" }}>
@@ -92,7 +98,7 @@ export default function MonadCoPilot() {
         @keyframes toastIn     { from { opacity: 0; transform: translateX(12px);  } to { opacity: 1; transform: translateX(0); } }
         @keyframes pulseRing   { 0%,100% { box-shadow: 0 0 0 0px rgba(74,222,128,0.4); } 50% { box-shadow: 0 0 0 5px rgba(74,222,128,0); } }
 
-        /* ── Stat grid ── */
+        /* ── Stat grid: 2 → 3 → 6 cols ── */
         .stat-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
@@ -102,7 +108,7 @@ export default function MonadCoPilot() {
         @media (min-width: 540px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (min-width: 900px) { .stat-grid { grid-template-columns: repeat(6, 1fr); } }
 
-        /* ── Header: mobile-first ── */
+        /* ── Header: stacked mobile, row desktop ── */
         .app-header {
           padding: 14px 0 12px;
           border-bottom: 1px solid ${T.border};
@@ -112,7 +118,7 @@ export default function MonadCoPilot() {
             "brand actions"
             "meta  meta";
           grid-template-columns: 1fr auto;
-          gap: 8px 12px;
+          gap: 8px 10px;
           align-items: center;
         }
         @media (min-width: 700px) {
@@ -134,14 +140,14 @@ export default function MonadCoPilot() {
         }
         .header-title {
           font-family: 'Syne', sans-serif;
-          font-size: 16px;
           font-weight: 800;
           color: #fff;
           letter-spacing: -0.04em;
           line-height: 1.1;
+          font-size: 16px;
         }
         @media (min-width: 400px) { .header-title { font-size: 18px; } }
-        @media (min-width: 700px)  { .header-title { font-size: 21px; white-space: nowrap; } }
+        @media (min-width: 700px) { .header-title { font-size: 21px; } }
 
         .header-meta {
           grid-area: meta;
@@ -154,18 +160,16 @@ export default function MonadCoPilot() {
           gap: 5px;
           flex-wrap: wrap;
         }
-        @media (min-width: 700px) {
-          .header-meta { justify-content: center; font-size: 9.5px; }
-        }
+        @media (min-width: 700px) { .header-meta { justify-content: center; font-size: 9.5px; } }
 
         .header-actions {
           grid-area: actions;
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
+          position: relative;
         }
 
-        /* Generate button */
         .gen-btn {
           background: ${T.purple};
           color: #fff;
@@ -210,7 +214,7 @@ export default function MonadCoPilot() {
           white-space: nowrap;
         }
 
-        /* Source chips */
+        /* Source bar */
         .source-bar {
           display: flex;
           gap: 8px;
@@ -245,6 +249,21 @@ export default function MonadCoPilot() {
             margin-top: 56px;
           }
         }
+
+        /* Profile dropdown */
+        .profile-dropdown {
+          position: absolute;
+          top: calc(100% + 10px);
+          right: 0;
+          z-index: 50;
+          min-width: 220px;
+          background: #13131a;
+          border: 1px solid ${T.border};
+          border-radius: 12px;
+          padding: 4px;
+          box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+          animation: cardSlideIn 0.15s ease;
+        }
       `}</style>
 
       {/* Ambient glow */}
@@ -270,16 +289,14 @@ export default function MonadCoPilot() {
         {/* ── HEADER ── */}
         <header className="app-header">
 
-          {/* Brand: logo + title + v1 badge */}
+          {/* Brand */}
           <div className="header-brand">
             <div style={{
               width: 32, height: 32, borderRadius: 9, flexShrink: 0,
               background: `linear-gradient(135deg, ${T.purple} 0%, ${T.purpleD} 100%)`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 14,
+              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
               boxShadow: `0 0 0 1px ${T.purple}40, 0 4px 16px ${T.purple}30`,
             }}>▲</div>
-
             <div style={{ minWidth: 0 }}>
               <h1 className="header-title">Monad CT Co-Pilot</h1>
               <span style={{
@@ -291,20 +308,20 @@ export default function MonadCoPilot() {
             </div>
           </div>
 
-          {/* Meta: date + time — spans full width on mobile, center column on desktop */}
+          {/* Meta */}
           <div className="header-meta">
-            <span>ECOSYSTEM</span>
+            <span>ECOSYSTEM INTELLIGENCE</span>
             <span style={{ color: T.border2 }}>·</span>
             <span>{dateStr}</span>
             <span style={{ color: T.border2 }}>·</span>
             <span style={{ fontVariantNumeric: "tabular-nums" }}>{timeStr}</span>
           </div>
 
-          {/* Actions: profile dropdown + generate */}
-          <div className="header-actions" style={{ position: "relative" }}>
+          {/* Actions */}
+          <div className="header-actions">
             {generating && <Dot color={T.purple} pulse />}
 
-            {/* Profile avatar button */}
+            {/* Avatar button */}
             <button
               onClick={() => setShowProfile(p => !p)}
               style={{
@@ -317,95 +334,60 @@ export default function MonadCoPilot() {
               onMouseEnter={e => e.currentTarget.style.borderColor = T.purple}
               onMouseLeave={e => e.currentTarget.style.borderColor = T.border2}
             >
-              {user?.user_metadata?.avatar_url ? (
-                <img src={user.user_metadata.avatar_url} alt="avatar"
-                  style={{ width: 32, height: 32, borderRadius: "50%", display: "block" }}
-                />
-              ) : (
-                <span style={{ fontFamily: "'Syne',sans-serif", fontSize: 13, fontWeight: 700, color: T.purple }}>
-                  {user?.email?.[0]?.toUpperCase() ?? "U"}
-                </span>
-              )}
+              {avatarUrl
+                ? <img src={avatarUrl} alt="avatar" style={{ width: 32, height: 32, display: "block" }} />
+                : <span style={{ fontFamily: "'Syne',sans-serif", fontSize: 13, fontWeight: 700, color: T.purple }}>{initial}</span>
+              }
             </button>
 
             {/* Dropdown */}
             {showProfile && (
               <>
-                {/* Backdrop */}
-                <div
-                  onClick={() => setShowProfile(false)}
-                  style={{ position: "fixed", inset: 0, zIndex: 49 }}
-                />
-                <div style={{
-                  position: "absolute", top: "calc(100% + 10px)", right: 0,
-                  zIndex: 50, minWidth: 220,
-                  background: "#13131a", border: `1px solid ${T.border}`,
-                  borderRadius: 12, padding: "4px",
-                  boxShadow: "0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)",
-                  animation: "cardSlideIn 0.15s ease",
-                }}>
+                <div onClick={() => setShowProfile(false)} style={{ position: "fixed", inset: 0, zIndex: 49 }} />
+                <div className="profile-dropdown">
                   {/* User info */}
-                  <div style={{
-                    padding: "12px 14px 10px",
-                    borderBottom: `1px solid ${T.border}`,
-                    marginBottom: 4,
-                  }}>
+                  <div style={{ padding: "12px 14px 10px", borderBottom: `1px solid ${T.border}`, marginBottom: 4 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      {user?.user_metadata?.avatar_url ? (
-                        <img src={user.user_metadata.avatar_url} alt="avatar"
-                          style={{ width: 36, height: 36, borderRadius: "50%", border: `1px solid ${T.border2}` }}
-                        />
-                      ) : (
-                        <div style={{
-                          width: 36, height: 36, borderRadius: "50%",
-                          background: `${T.purple}20`, border: `1px solid ${T.purple}40`,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          fontFamily: "'Syne',sans-serif", fontSize: 15, fontWeight: 700, color: T.purple,
-                        }}>
-                          {user?.email?.[0]?.toUpperCase() ?? "U"}
-                        </div>
-                      )}
+                      {avatarUrl
+                        ? <img src={avatarUrl} alt="avatar" style={{ width: 36, height: 36, borderRadius: "50%", border: `1px solid ${T.border2}` }} />
+                        : <div style={{
+                            width: 36, height: 36, borderRadius: "50%",
+                            background: `${T.purple}20`, border: `1px solid ${T.purple}40`,
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            fontFamily: "'Syne',sans-serif", fontSize: 15, fontWeight: 700, color: T.purple,
+                          }}>{initial}</div>
+                      }
                       <div style={{ minWidth: 0 }}>
                         <div style={{
-                          fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500,
-                          color: T.text, letterSpacing: "-0.01em",
-                          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                        }}>
-                          {user?.user_metadata?.full_name || user?.user_metadata?.name || "User"}
-                        </div>
+                          fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: T.text,
+                          letterSpacing: "-0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        }}>{fullName}</div>
                         <div style={{
-                          fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5,
-                          color: T.textDim, letterSpacing: "0.02em", marginTop: 2,
+                          fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim,
+                          letterSpacing: "0.02em", marginTop: 2,
                           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                        }}>
-                          {user?.email}
-                        </div>
+                        }}>{email}</div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Provider badge */}
+                  {/* Provider */}
                   <div style={{ padding: "6px 14px 4px" }}>
-                    <span style={{
-                      fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, letterSpacing: "0.08em",
-                      color: T.textDim, textTransform: "uppercase",
-                    }}>
-                      Signed in via {user?.app_metadata?.provider ?? "oauth"}
+                    <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, letterSpacing: "0.08em", color: T.textDim, textTransform: "uppercase" }}>
+                      Signed in via {provider}
                     </span>
                   </div>
 
                   {/* Sign out */}
                   <button
-                    onClick={() => { setShowProfile(false); signOut(); }}
+                    onClick={() => { setShowProfile(false); supabase.auth.signOut(); }}
                     style={{
-                      width: "100%", background: "none",
-                      border: "none", borderRadius: 8,
+                      width: "100%", background: "none", border: "none", borderRadius: 8,
                       padding: "10px 14px", marginTop: 2,
                       display: "flex", alignItems: "center", gap: 10,
                       cursor: "pointer", transition: "background 0.12s",
                       fontFamily: "'Inter',sans-serif", fontSize: 13,
-                      fontWeight: 450, color: "#f87171",
-                      letterSpacing: "-0.01em", textAlign: "left",
+                      fontWeight: 450, color: T.red, letterSpacing: "-0.01em", textAlign: "left",
                     }}
                     onMouseEnter={e => e.currentTarget.style.background = "rgba(248,113,113,0.08)"}
                     onMouseLeave={e => e.currentTarget.style.background = "none"}
@@ -470,8 +452,7 @@ export default function MonadCoPilot() {
               {tab.label}
               <span style={{
                 fontFamily: "'IBM Plex Mono',monospace", fontSize: 9,
-                fontVariantNumeric: "tabular-nums",
-                padding: "2px 6px", borderRadius: 3,
+                fontVariantNumeric: "tabular-nums", padding: "2px 6px", borderRadius: 3,
                 background: activeTab === tab.key ? `${T.purple}20` : T.border,
                 color: activeTab === tab.key ? T.purple : T.textDim,
               }}>{tab.count}</span>
@@ -505,6 +486,8 @@ export default function MonadCoPilot() {
                   onReject={()  => updateStatus(d.id, "rejected")}
                   onReset={()   => updateStatus(d.id, "pending")}
                   onEdit={()    => setEditingDraft(d)}
+                  onSchedule={t => scheduleReminder(d.id, t)}
+                  onCancelSchedule={() => cancelReminder(d.id)}
                 />
               ))}
             </div>
@@ -548,7 +531,7 @@ export default function MonadCoPilot() {
                   onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
                   onMouseLeave={e => e.currentTarget.style.opacity = "1"}
                 >
-                  Generate from {selectedIds.length} selected →
+                  Generate from {selectedIds.length} selected
                 </button>
               )}
             </div>
@@ -569,9 +552,7 @@ export default function MonadCoPilot() {
                 padding: "12px 16px", marginBottom: 12,
                 background: `${T.red}10`, border: `1px solid ${T.red}30`, borderRadius: 8,
                 fontFamily: "'IBM Plex Mono',monospace", fontSize: 10.5, color: T.red, letterSpacing: "0.04em",
-              }}>
-                {githubError}
-              </div>
+              }}>{githubError}</div>
             )}
             {!githubLoading && !githubError && allUpdates.length > 0 && (
               <div style={{
