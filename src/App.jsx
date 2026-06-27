@@ -26,6 +26,7 @@ export default function MonadCoPilot({ session }) {
   const [selectedIds,  setSelectedIds]  = useState([]);
   const [time,         setTime]         = useState(new Date());
   const [showProfile,  setShowProfile]  = useState(false);
+  const [darkMode,     setDarkMode]     = useState(true);
 
   // ── Clock ─────────────────────────────────────────────────
   useEffect(() => {
@@ -81,19 +82,32 @@ export default function MonadCoPilot({ session }) {
   const provider   = user?.app_metadata?.provider ?? "oauth";
   const initial    = email[0]?.toUpperCase() ?? "U";
 
+  const theme = darkMode ? T : {
+    ...T,
+    bg:      "#F4F3FF",
+    surface: "#EEEDF9",
+    card:    "#FFFFFF",
+    card2:   "#F8F7FF",
+    border:  "#E0DEFA",
+    border2: "#CCC9F5",
+    text:    "#1A1840",
+    textSub: "#4B4880",
+    textDim: "#8885B0",
+  };
+
   return (
-    <div style={{ minHeight: "100vh", background: T.bg, color: T.text, position: "relative" }}>
+    <div style={{ minHeight: "100vh", background: theme.bg, color: theme.text, position: "relative" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:ital,wght@0,400;0,450;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { overflow-x: hidden; }
-        body { background: ${T.bg}; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background: ${theme.bg}; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
         button { font-feature-settings: "cv11","ss01"; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         ::-webkit-scrollbar { width: 3px; height: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: ${T.border2}; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb { background: ${theme.border2}; border-radius: 2px; }
         textarea { resize: vertical; }
-        textarea::placeholder { color: ${T.textDim}; font-family: 'Inter', sans-serif; font-size: 13.5px; }
+        textarea::placeholder { color: ${theme.textDim}; font-family: 'Inter', sans-serif; font-size: 13.5px; }
         @keyframes cardSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes toastIn     { from { opacity: 0; transform: translateX(12px);  } to { opacity: 1; transform: translateX(0); } }
         @keyframes pulseRing   { 0%,100% { box-shadow: 0 0 0 0px rgba(74,222,128,0.4); } 50% { box-shadow: 0 0 0 5px rgba(74,222,128,0); } }
@@ -111,7 +125,7 @@ export default function MonadCoPilot({ session }) {
         /* ── Header: stacked mobile, row desktop ── */
         .app-header {
           padding: 14px 0 12px;
-          border-bottom: 1px solid ${T.border};
+          border-bottom: 1px solid ${theme.border};
           margin-bottom: 20px;
           display: grid;
           grid-template-areas:
@@ -153,7 +167,7 @@ export default function MonadCoPilot({ session }) {
           grid-area: meta;
           font-family: 'IBM Plex Mono', monospace;
           font-size: 9px;
-          color: ${T.textDim};
+          color: ${theme.textDim};
           letter-spacing: 0.05em;
           display: flex;
           align-items: center;
@@ -193,7 +207,7 @@ export default function MonadCoPilot({ session }) {
           display: flex;
           gap: 0;
           margin-bottom: 20px;
-          border-bottom: 1px solid ${T.border};
+          border-bottom: 1px solid ${theme.border};
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
         }
@@ -227,14 +241,14 @@ export default function MonadCoPilot({ session }) {
           align-items: center;
           gap: 6px;
           padding: 6px 10px;
-          background: ${T.card};
-          border: 1px solid ${T.border};
+          background: ${theme.card};
+          border: 1px solid ${theme.border};
           border-radius: 6px;
         }
 
         /* Footer */
         .app-footer {
-          border-top: 1px solid ${T.border};
+          border-top: 1px solid ${theme.border};
           margin-top: 40px;
           padding: 18px 0;
           display: flex;
@@ -258,7 +272,7 @@ export default function MonadCoPilot({ session }) {
           z-index: 50;
           min-width: 220px;
           background: #13131a;
-          border: 1px solid ${T.border};
+          border: 1px solid ${theme.border};
           border-radius: 12px;
           padding: 4px;
           box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
@@ -311,9 +325,9 @@ export default function MonadCoPilot({ session }) {
           {/* Meta */}
           <div className="header-meta">
             <span>ECOSYSTEM INTELLIGENCE</span>
-            <span style={{ color: T.border2 }}>·</span>
+            <span style={{ color: theme.border2 }}>·</span>
             <span>{dateStr}</span>
-            <span style={{ color: T.border2 }}>·</span>
+            <span style={{ color: theme.border2 }}>·</span>
             <span style={{ fontVariantNumeric: "tabular-nums" }}>{timeStr}</span>
           </div>
 
@@ -325,14 +339,14 @@ export default function MonadCoPilot({ session }) {
             <button
               onClick={() => setShowProfile(p => !p)}
               style={{
-                background: "none", border: `1px solid ${T.border2}`,
+                background: "none", border: `1px solid ${theme.border2}`,
                 borderRadius: "50%", padding: 0, cursor: "pointer",
                 width: 32, height: 32, flexShrink: 0, overflow: "hidden",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "border-color 0.15s",
               }}
               onMouseEnter={e => e.currentTarget.style.borderColor = T.purple}
-              onMouseLeave={e => e.currentTarget.style.borderColor = T.border2}
+              onMouseLeave={e => e.currentTarget.style.borderColor = theme.border2}
             >
               {avatarUrl
                 ? <img src={avatarUrl} alt="avatar" style={{ width: 32, height: 32, display: "block" }} />
@@ -346,10 +360,10 @@ export default function MonadCoPilot({ session }) {
                 <div onClick={() => setShowProfile(false)} style={{ position: "fixed", inset: 0, zIndex: 49 }} />
                 <div className="profile-dropdown">
                   {/* User info */}
-                  <div style={{ padding: "12px 14px 10px", borderBottom: `1px solid ${T.border}`, marginBottom: 4 }}>
+                  <div style={{ padding: "12px 14px 10px", borderBottom: `1px solid ${theme.border}`, marginBottom: 4 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       {avatarUrl
-                        ? <img src={avatarUrl} alt="avatar" style={{ width: 36, height: 36, borderRadius: "50%", border: `1px solid ${T.border2}` }} />
+                        ? <img src={avatarUrl} alt="avatar" style={{ width: 36, height: 36, borderRadius: "50%", border: `1px solid ${theme.border2}` }} />
                         : <div style={{
                             width: 36, height: 36, borderRadius: "50%",
                             background: `${T.purple}20`, border: `1px solid ${T.purple}40`,
@@ -359,11 +373,11 @@ export default function MonadCoPilot({ session }) {
                       }
                       <div style={{ minWidth: 0 }}>
                         <div style={{
-                          fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: T.text,
+                          fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 500, color: theme.text,
                           letterSpacing: "-0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                         }}>{fullName}</div>
                         <div style={{
-                          fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim,
+                          fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: theme.textDim,
                           letterSpacing: "0.02em", marginTop: 2,
                           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                         }}>{email}</div>
@@ -371,19 +385,89 @@ export default function MonadCoPilot({ session }) {
                     </div>
                   </div>
 
+                  {/* Drafts summary */}
+                  <div style={{
+                    margin: "4px 4px 0",
+                    padding: "10px 12px",
+                    background: theme.bg,
+                    borderRadius: 8,
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "6px 10px",
+                  }}>
+                    {[
+                      { label: "Pending",  val: counts.pending,  color: T.purple },
+                      { label: "Approved", val: counts.approved, color: T.green  },
+                      { label: "Edited",   val: counts.edited,   color: T.yellow },
+                      { label: "Rejected", val: counts.rejected, color: T.red    },
+                    ].map(({ label, val, color }) => (
+                      <div key={label} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontFamily: "'Syne',sans-serif", fontSize: 15, fontWeight: 800, color, fontVariantNumeric: "tabular-nums" }}>{val}</span>
+                        <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: theme.textDim, letterSpacing: "0.04em", textTransform: "uppercase" }}>{label}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Divider */}
+                  <div style={{ height: 1, background: theme.border, margin: "8px 4px 4px" }} />
+
+                  {/* Dark mode toggle */}
+                  <button
+                    onClick={() => { setDarkMode(d => !d); }}
+                    style={{
+                      width: "100%", background: "none", border: "none", borderRadius: 8,
+                      padding: "10px 14px",
+                      display: "flex", alignItems: "center", gap: 10,
+                      cursor: "pointer", transition: "background 0.12s",
+                      fontFamily: "'Inter',sans-serif", fontSize: 13,
+                      fontWeight: 450, color: darkMode ? theme.text : "#1a1a2e", letterSpacing: "-0.01em", textAlign: "left",
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = `${T.purple}10`}
+                    onMouseLeave={e => e.currentTarget.style.background = "none"}
+                  >
+                    {darkMode ? (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                      </svg>
+                    ) : (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                      </svg>
+                    )}
+                    {darkMode ? "Light Mode" : "Dark Mode"}
+                    <span style={{
+                      marginLeft: "auto",
+                      width: 32, height: 18, borderRadius: 9,
+                      background: darkMode ? T.purple : theme.border2,
+                      position: "relative", transition: "background 0.2s", flexShrink: 0,
+                      display: "inline-block",
+                    }}>
+                      <span style={{
+                        position: "absolute", top: 3, left: darkMode ? 17 : 3,
+                        width: 12, height: 12, borderRadius: "50%",
+                        background: "#fff", transition: "left 0.2s",
+                      }} />
+                    </span>
+                  </button>
+
                   {/* Provider */}
-                  <div style={{ padding: "6px 14px 4px" }}>
-                    <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, letterSpacing: "0.08em", color: T.textDim, textTransform: "uppercase" }}>
+                  <div style={{ padding: "2px 14px 6px" }}>
+                    <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, letterSpacing: "0.08em", color: theme.textDim, textTransform: "uppercase" }}>
                       Signed in via {provider}
                     </span>
                   </div>
+
+                  <div style={{ height: 1, background: theme.border, margin: "0 4px 4px" }} />
 
                   {/* Sign out */}
                   <button
                     onClick={() => { setShowProfile(false); supabase.auth.signOut(); }}
                     style={{
                       width: "100%", background: "none", border: "none", borderRadius: 8,
-                      padding: "10px 14px", marginTop: 2,
+                      padding: "10px 14px",
                       display: "flex", alignItems: "center", gap: 10,
                       cursor: "pointer", transition: "background 0.12s",
                       fontFamily: "'Inter',sans-serif", fontSize: 13,
@@ -444,17 +528,17 @@ export default function MonadCoPilot({ session }) {
               style={{
                 fontWeight: activeTab === tab.key ? 500 : 400,
                 borderBottomColor: activeTab === tab.key ? T.purple : "transparent",
-                color: activeTab === tab.key ? "#fff" : T.textDim,
+                color: activeTab === tab.key ? "#fff" : theme.textDim,
               }}
-              onMouseEnter={e => { if (activeTab !== tab.key) e.currentTarget.style.color = T.textSub; }}
-              onMouseLeave={e => { if (activeTab !== tab.key) e.currentTarget.style.color = T.textDim; }}
+              onMouseEnter={e => { if (activeTab !== tab.key) e.currentTarget.style.color = theme.textSub; }}
+              onMouseLeave={e => { if (activeTab !== tab.key) e.currentTarget.style.color = theme.textDim; }}
             >
               {tab.label}
               <span style={{
                 fontFamily: "'IBM Plex Mono',monospace", fontSize: 9,
                 fontVariantNumeric: "tabular-nums", padding: "2px 6px", borderRadius: 3,
-                background: activeTab === tab.key ? `${T.purple}20` : T.border,
-                color: activeTab === tab.key ? T.purple : T.textDim,
+                background: activeTab === tab.key ? `${T.purple}20` : theme.border,
+                color: activeTab === tab.key ? T.purple : theme.textDim,
               }}>{tab.count}</span>
             </button>
           ))}
@@ -474,7 +558,7 @@ export default function MonadCoPilot({ session }) {
             {generating && <GeneratingBar />}
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {filteredDrafts.length === 0 ? (
-                <div style={{ textAlign: "center", padding: "56px 0", fontFamily: "'Inter',sans-serif", fontSize: 13, color: T.textDim, letterSpacing: "-0.01em" }}>
+                <div style={{ textAlign: "center", padding: "56px 0", fontFamily: "'Inter',sans-serif", fontSize: 13, color: theme.textDim, letterSpacing: "-0.01em" }}>
                   {draftsLoading ? "Loading drafts..." : "No drafts match current filters"}
                 </div>
               ) : filteredDrafts.map(d => (
@@ -510,8 +594,8 @@ export default function MonadCoPilot({ session }) {
               {SOURCES.map(s => (
                 <div key={s} className="source-chip">
                   <SrcChip source={s} />
-                  <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: T.border2 }}>·</span>
-                  <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim, letterSpacing: "0.01em" }}>
+                  <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9, color: theme.border2 }}>·</span>
+                  <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: theme.textDim, letterSpacing: "0.01em" }}>
                     {allUpdates.filter(u => u.source === s).length} updates
                   </span>
                 </div>
@@ -540,8 +624,8 @@ export default function MonadCoPilot({ session }) {
               <div style={{
                 display: "flex", alignItems: "center", gap: 10,
                 padding: "12px 16px", marginBottom: 12,
-                background: T.card, border: `1px solid ${T.border}`, borderRadius: 8,
-                fontFamily: "'IBM Plex Mono',monospace", fontSize: 10.5, color: T.textDim, letterSpacing: "0.04em",
+                background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 8,
+                fontFamily: "'IBM Plex Mono',monospace", fontSize: 10.5, color: theme.textDim, letterSpacing: "0.04em",
               }}>
                 <Dot color={T.purple} pulse />
                 Fetching live GitHub commits...
@@ -563,7 +647,7 @@ export default function MonadCoPilot({ session }) {
               }}>
                 <Dot color={T.green} pulse />
                 {allUpdates.length} live commits from {[...new Set(GITHUB_SOURCES.map(s => s.label))].join(", ")}
-                <span style={{ color: T.textDim, marginLeft: "auto" }}>refreshes every 5 min</span>
+                <span style={{ color: theme.textDim, marginLeft: "auto" }}>refreshes every 5 min</span>
               </div>
             )}
 
@@ -582,14 +666,14 @@ export default function MonadCoPilot({ session }) {
 
         {/* ── FOOTER ── */}
         <footer className="app-footer">
-          <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim, letterSpacing: "0.07em" }}>
+          <span style={{ fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: theme.textDim, letterSpacing: "0.07em" }}>
             MONAD CT CO-PILOT · ECOSYSTEM INTELLIGENCE TERMINAL
           </span>
           <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
             {SOURCES.map(s => (
               <span key={s} style={{
                 display: "flex", alignItems: "center", gap: 6,
-                fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: T.textDim, letterSpacing: "0.02em",
+                fontFamily: "'IBM Plex Mono',monospace", fontSize: 9.5, color: theme.textDim, letterSpacing: "0.02em",
               }}>
                 <SrcChip source={s} />
                 <Dot color={T.green} pulse />
