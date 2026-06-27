@@ -4,8 +4,8 @@ import { GITHUB_SOURCES } from "./constants/github";
 import { useIsMobile } from "./hooks/useWindowWidth";
   const [user, setUser] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
-  const signOut = () => import("./main").then(m => m.supabase.auth.signOut());
-  useEffect(() => { import("./main").then(m => m.supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null))); }, []);
+  const signOut = () => supabase.auth.signOut();
+  useEffect(() => { supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null)); }, []);
 import { useDrafts } from "./hooks/useDrafts";
 import { useGitHubUpdates } from "./hooks/useGitHubUpdates";
 import { StatCard } from "./components/StatCard";
@@ -18,7 +18,7 @@ import { Toast, Dot, PillBtn, GeneratingBar, SrcChip } from "./components/UI";
 export default function MonadCoPilot() {
   const isMobile = useIsMobile();
   const [user, setUser] = useState(null);
-  const signOut = () => import("./main").then(m => m.supabase.auth.signOut());
+  const signOut = () => supabase.auth.signOut();
 
   const [activeTab,    setActiveTab]    = useState("drafts");
   const [filterCat,    setFilterCat]    = useState("All");
