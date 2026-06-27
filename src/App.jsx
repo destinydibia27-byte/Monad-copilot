@@ -96,18 +96,32 @@ export default function MonadCoPilot({ session }) {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: theme.bg, color: theme.text, position: "relative" }}>
+    <div style={{
+      minHeight: "100vh",
+      background: theme.bg,
+      color: theme.text,
+      position: "relative",
+      "--c-bg":      theme.bg,
+      "--c-surface": theme.surface,
+      "--c-card":    theme.card,
+      "--c-border":  theme.border,
+      "--c-border2": theme.border2,
+      "--c-text":    theme.text,
+      "--c-textSub": theme.textSub,
+      "--c-textDim": theme.textDim,
+      "--c-purple":  theme.purple,
+    }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:ital,wght@0,400;0,450;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { overflow-x: hidden; }
-        body { background: ${theme.bg}; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background: theme.bg; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
         button { font-feature-settings: "cv11","ss01"; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         ::-webkit-scrollbar { width: 3px; height: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: ${theme.border2}; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb { background: theme.border2; border-radius: 2px; }
         textarea { resize: vertical; }
-        textarea::placeholder { color: ${theme.textDim}; font-family: 'Inter', sans-serif; font-size: 13.5px; }
+        textarea::placeholder { color: theme.textDim; font-family: 'Inter', sans-serif; font-size: 13.5px; }
         @keyframes cardSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes toastIn     { from { opacity: 0; transform: translateX(12px);  } to { opacity: 1; transform: translateX(0); } }
         @keyframes pulseRing   { 0%,100% { box-shadow: 0 0 0 0px rgba(74,222,128,0.4); } 50% { box-shadow: 0 0 0 5px rgba(74,222,128,0); } }
@@ -125,7 +139,7 @@ export default function MonadCoPilot({ session }) {
         /* ── Header: stacked mobile, row desktop ── */
         .app-header {
           padding: 14px 0 12px;
-          border-bottom: 1px solid ${theme.border};
+          border-bottom: 1px solid theme.border;
           margin-bottom: 20px;
           display: grid;
           grid-template-areas:
@@ -155,7 +169,7 @@ export default function MonadCoPilot({ session }) {
         .header-title {
           font-family: 'Syne', sans-serif;
           font-weight: 800;
-          color: #fff;
+          color: theme.text;
           letter-spacing: -0.04em;
           line-height: 1.1;
           font-size: 16px;
@@ -167,7 +181,7 @@ export default function MonadCoPilot({ session }) {
           grid-area: meta;
           font-family: 'IBM Plex Mono', monospace;
           font-size: 9px;
-          color: ${theme.textDim};
+          color: theme.textDim;
           letter-spacing: 0.05em;
           display: flex;
           align-items: center;
@@ -207,7 +221,7 @@ export default function MonadCoPilot({ session }) {
           display: flex;
           gap: 0;
           margin-bottom: 20px;
-          border-bottom: 1px solid ${theme.border};
+          border-bottom: 1px solid theme.border;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
         }
@@ -241,14 +255,14 @@ export default function MonadCoPilot({ session }) {
           align-items: center;
           gap: 6px;
           padding: 6px 10px;
-          background: ${theme.card};
-          border: 1px solid ${theme.border};
+          background: theme.card;
+          border: 1px solid theme.border;
           border-radius: 6px;
         }
 
         /* Footer */
         .app-footer {
-          border-top: 1px solid ${theme.border};
+          border-top: 1px solid theme.border;
           margin-top: 40px;
           padding: 18px 0;
           display: flex;
@@ -271,8 +285,8 @@ export default function MonadCoPilot({ session }) {
           right: 0;
           z-index: 50;
           min-width: 220px;
-          background: #13131a;
-          border: 1px solid ${theme.border};
+          background: theme.card;
+          border: 1px solid theme.border;
           border-radius: 12px;
           padding: 4px;
           box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
@@ -339,7 +353,7 @@ export default function MonadCoPilot({ session }) {
             <button
               onClick={() => setShowProfile(p => !p)}
               style={{
-                background: "none", border: `1px solid ${theme.border2}`,
+                background: "none", border: `1px solid theme.border2`,
                 borderRadius: "50%", padding: 0, cursor: "pointer",
                 width: 32, height: 32, flexShrink: 0, overflow: "hidden",
                 display: "flex", alignItems: "center", justifyContent: "center",
@@ -360,10 +374,10 @@ export default function MonadCoPilot({ session }) {
                 <div onClick={() => setShowProfile(false)} style={{ position: "fixed", inset: 0, zIndex: 49 }} />
                 <div className="profile-dropdown">
                   {/* User info */}
-                  <div style={{ padding: "12px 14px 10px", borderBottom: `1px solid ${theme.border}`, marginBottom: 4 }}>
+                  <div style={{ padding: "12px 14px 10px", borderBottom: `1px solid theme.border`, marginBottom: 4 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       {avatarUrl
-                        ? <img src={avatarUrl} alt="avatar" style={{ width: 36, height: 36, borderRadius: "50%", border: `1px solid ${theme.border2}` }} />
+                        ? <img src={avatarUrl} alt="avatar" style={{ width: 36, height: 36, borderRadius: "50%", border: `1px solid theme.border2` }} />
                         : <div style={{
                             width: 36, height: 36, borderRadius: "50%",
                             background: `${T.purple}20`, border: `1px solid ${T.purple}40`,
@@ -624,7 +638,7 @@ export default function MonadCoPilot({ session }) {
               <div style={{
                 display: "flex", alignItems: "center", gap: 10,
                 padding: "12px 16px", marginBottom: 12,
-                background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 8,
+                background: theme.card, border: `1px solid theme.border`, borderRadius: 8,
                 fontFamily: "'IBM Plex Mono',monospace", fontSize: 10.5, color: theme.textDim, letterSpacing: "0.04em",
               }}>
                 <Dot color={T.purple} pulse />
