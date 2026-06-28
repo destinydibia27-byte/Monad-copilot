@@ -101,7 +101,14 @@ function LoginScreen() {
 
         <div style={{ position:"relative", zIndex:2, padding:"36px 32px 28px" }}>
           <div style={{ textAlign:"center", marginBottom:28 }}>
-            <div style={{ width:60, height:60, borderRadius:18, margin:"0 auto 18px", background:"linear-gradient(135deg, #836EF9 0%, #5b21b6 100%)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:26, boxShadow:"0 0 0 1px rgba(131,110,249,0.4), 0 0 40px rgba(131,110,249,0.5), 0 8px 24px rgba(0,0,0,0.5)" }}>&#9650;</div>
+            <div style={{ margin:"0 auto 18px", width:64, height:64, display:"flex", alignItems:"center", justifyContent:"center", filter:"drop-shadow(0 0 20px rgba(131,110,249,0.6))" }}>
+              <svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="32" height="32" rx="9" fill="#13123A"/>
+                <path d="M16 6L27 25H5L16 6Z" stroke="#836EF9" strokeWidth="1.8" fill="none" strokeLinejoin="round"/>
+                <path d="M16 11L23 22H9L16 11Z" fill="white"/>
+                <line x1="12" y1="27" x2="20" y2="27" stroke="#836EF9" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </div>
             <h1 style={{ fontFamily:"'Syne', sans-serif", fontSize:26, fontWeight:800, color:"#fff", letterSpacing:"-0.04em", margin:"0 0 8px", lineHeight:1.1 }}>Monad CT Co-Pilot</h1>
             <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
               <div style={{ height:1, width:28, background:"linear-gradient(90deg, transparent, rgba(131,110,249,0.5))" }} />

@@ -11,6 +11,7 @@ import { UpdateRow } from "./components/UpdateRow";
 import { EditModal } from "./components/EditModal";
 import { GenPanel } from "./components/GenPanel";
 import { Toast, Dot, GeneratingBar, SrcChip } from "./components/UI";
+import { MonadLogo } from "./components/Logo";
 
 export default function MonadCoPilot({ session }) {
   const isMobile  = useIsMobile();
@@ -330,12 +331,7 @@ export default function MonadCoPilot({ session }) {
 
           {/* Brand */}
           <div className="header-brand">
-            <div style={{
-              width: 32, height: 32, borderRadius: 9, flexShrink: 0,
-              background: `linear-gradient(135deg, ${T.purple} 0%, ${T.purpleD} 100%)`,
-              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14,
-              boxShadow: `0 0 0 1px ${T.purple}40, 0 4px 16px ${T.purple}30`,
-            }}>▲</div>
+            <MonadLogo size={34} radius={9} />
             <div style={{ minWidth: 0 }}>
               <h1 className="header-title">Monad CT Co-Pilot</h1>
               <span style={{
@@ -557,7 +553,7 @@ export default function MonadCoPilot({ session }) {
               style={{
                 fontWeight: activeTab === tab.key ? 500 : 400,
                 borderBottomColor: activeTab === tab.key ? T.purple : "transparent",
-                color: activeTab === tab.key ? "#fff" : theme.textDim,
+                color: activeTab === tab.key ? theme.text : theme.textDim,
               }}
               onMouseEnter={e => { if (activeTab !== tab.key) e.currentTarget.style.color = theme.textSub; }}
               onMouseLeave={e => { if (activeTab !== tab.key) e.currentTarget.style.color = theme.textDim; }}
