@@ -82,8 +82,8 @@ function LoginScreen() {
         .orb1 { animation: floatOrb1 8s ease-in-out infinite; }
         .orb2 { animation: floatOrb2 10s ease-in-out infinite; }
         .monad-bg { animation: shimmer 4s ease-in-out infinite; }
-        .login-title { font-family: Syne, sans-serif; font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.04em; margin: 0 0 8px; line-height: 1.1; white-space: nowrap; }
-        @media (max-width: 440px) { .login-title { font-size: 22px; white-space: normal; } }
+        .login-title { font-family: Syne, sans-serif; font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.04em; margin: 0 0 8px; line-height: 1.1; white-space: nowrap; }
+        @media (max-width: 440px) { .login-title { font-size: 18px; white-space: nowrap; } }
         .login-inner { padding: 36px 32px 28px; }
         @media (max-width: 440px) { .login-inner { padding: 22px 16px 18px; } }
       `}</style>
