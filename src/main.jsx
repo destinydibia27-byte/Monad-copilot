@@ -46,8 +46,8 @@ function LoginScreen() {
 
   const features = [
     { icon: "⚡", text: "Live GitHub signals from Monad ecosystem repos" },
-    { icon: "✦",  text: "AI-generated tweet drafts in your voice" },
-    { icon: "✓",  text: "Approve, edit, and post directly to X" },
+    { icon: "✦",  text: "AI-generated tweet drafts in your voice"         },
+    { icon: "✓",  text: "Approve, edit, and post directly to X"           },
   ];
 
   const providers = [
@@ -57,174 +57,97 @@ function LoginScreen() {
 
   return (
     <div style={{
-      minHeight: "100dvh",
-      background: "#0B0B0F",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      fontFamily: "'Inter', sans-serif",
-      padding: "16px",
-      position: "relative",
-      overflow: "hidden",
+      minHeight: "100dvh", background: "#07070D",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontFamily: "'Inter', sans-serif", padding: "16px",
+      position: "relative", overflow: "hidden",
     }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
-        @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
-        @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes pulse { 0%,100% { opacity:0.5; } 50% { opacity:1; } }
+        @keyframes floatOrb1 { 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(30px,-20px) scale(1.05);} 66%{transform:translate(-20px,15px) scale(0.97);} }
+        @keyframes floatOrb2 { 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(-25px,20px) scale(1.03);} 66%{transform:translate(20px,-15px) scale(0.98);} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+        @keyframes spin { to{transform:rotate(360deg);} }
+        @keyframes shimmer { 0%{opacity:0.04;} 50%{opacity:0.09;} 100%{opacity:0.04;} }
         .login-card { animation: fadeUp 0.5s ease forwards; }
-        .logo-wrap  { animation: float 4s ease-in-out infinite; }
+        .orb1 { animation: floatOrb1 8s ease-in-out infinite; }
+        .orb2 { animation: floatOrb2 10s ease-in-out infinite; }
+        .monad-bg { animation: shimmer 4s ease-in-out infinite; }
       `}</style>
 
-      {/* Background glows */}
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-        <div style={{
-          position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)",
-          width: 600, height: 600, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }} />
-        <div style={{
-          position: "absolute", bottom: "10%", left: "20%",
-          width: 300, height: 300, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(96,165,250,0.07) 0%, transparent 70%)",
-          filter: "blur(30px)",
-        }} />
-        <div style={{
-          position: "absolute", top: "20%", right: "15%",
-          width: 200, height: 200, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(74,222,128,0.05) 0%, transparent 70%)",
-          filter: "blur(20px)",
-        }} />
-      </div>
+      <div className="orb1" style={{ position:"absolute", top:"8%", left:"12%", width:320, height:320, borderRadius:"50%", background:"radial-gradient(circle, rgba(131,110,249,0.35) 0%, rgba(91,33,182,0.15) 50%, transparent 75%)", filter:"blur(48px)", pointerEvents:"none" }} />
+      <div className="orb2" style={{ position:"absolute", bottom:"10%", right:"8%", width:280, height:280, borderRadius:"50%", background:"radial-gradient(circle, rgba(168,85,247,0.25) 0%, rgba(124,58,237,0.1) 50%, transparent 75%)", filter:"blur(40px)", pointerEvents:"none" }} />
+      <div style={{ position:"absolute", bottom:"30%", left:"5%", width:160, height:160, borderRadius:"50%", background:"radial-gradient(circle, rgba(96,165,250,0.15) 0%, transparent 70%)", filter:"blur(30px)", pointerEvents:"none" }} />
+      <div style={{ position:"absolute", top:"60%", right:"20%", width:100, height:100, borderRadius:"50%", background:"radial-gradient(circle, rgba(251,146,60,0.12) 0%, transparent 70%)", filter:"blur(20px)", pointerEvents:"none" }} />
 
-      {/* Subtle grid */}
-      <div style={{
-        position: "absolute", inset: 0, pointerEvents: "none",
-        backgroundImage: `linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px)`,
-        backgroundSize: "48px 48px",
-      }} />
+      <div className="login-card" style={{ position:"relative", zIndex:1, width:"100%", maxWidth:400, borderRadius:24, overflow:"hidden", boxShadow:"0 0 0 1px rgba(131,110,249,0.15), 0 32px 80px rgba(0,0,0,0.8)" }}>
+        <div style={{ position:"absolute", inset:0, background:"linear-gradient(160deg, rgba(30,20,60,0.96) 0%, rgba(13,10,25,0.99) 60%, rgba(20,10,40,0.96) 100%)", backdropFilter:"blur(24px)" }} />
 
-      {/* Card */}
-      <div className="login-card" style={{
-        position: "relative", zIndex: 1,
-        width: "100%", maxWidth: 380,
-        background: "rgba(19,19,26,0.85)",
-        border: "1px solid rgba(124,58,237,0.2)",
-        borderRadius: 20,
-        padding: "36px 32px 28px",
-        boxShadow: "0 0 0 1px rgba(124,58,237,0.1), 0 24px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04)",
-        backdropFilter: "blur(20px)",
-      }}>
-
-        {/* Logo */}
-        <div style={{ textAlign: "center", marginBottom: 28 }}>
-          <div className="logo-wrap" style={{ display: "inline-block", marginBottom: 20 }}>
-            <div style={{
-              width: 56, height: 56, borderRadius: 16,
-              background: "linear-gradient(135deg, #836EF9 0%, #5b21b6 100%)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 24, margin: "0 auto",
-              boxShadow: "0 0 0 1px rgba(131,110,249,0.5), 0 0 32px rgba(131,110,249,0.4), 0 8px 24px rgba(0,0,0,0.4)",
-            }}>▲</div>
-          </div>
-
-          <h1 style={{
-            fontFamily: "'Syne', sans-serif", fontSize: 26, fontWeight: 800,
-            color: "#fff", letterSpacing: "-0.04em", margin: "0 0 6px", lineHeight: 1.1,
-          }}>Monad CT Co-Pilot</h1>
-
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 6 }}>
-            <div style={{ height: 1, width: 32, background: "rgba(124,58,237,0.3)" }} />
-            <span style={{
-              color: "#836EF9", fontSize: 10, letterSpacing: "0.12em",
-              fontFamily: "'IBM Plex Mono', monospace", fontWeight: 500,
-            }}>ECOSYSTEM INTELLIGENCE</span>
-            <div style={{ height: 1, width: 32, background: "rgba(124,58,237,0.3)" }} />
-          </div>
+        <div className="monad-bg" style={{ position:"absolute", bottom:-40, right:-40, width:280, height:280, pointerEvents:"none", zIndex:0 }}>
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style={{ width:"100%", height:"100%" }}>
+            <defs>
+              <linearGradient id="monadGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#836EF9" stopOpacity="0.18"/>
+                <stop offset="100%" stopColor="#C084FC" stopOpacity="0.06"/>
+              </linearGradient>
+            </defs>
+            {/* Monad logo: rounded diamond with rounded square cutout */}
+            <path d="M50 8 C65 8, 92 35, 92 50 C92 65, 65 92, 50 92 C35 92, 8 65, 8 50 C8 35, 35 8, 50 8 Z" fill="url(#monadGrad)" stroke="rgba(131,110,249,0.25)" strokeWidth="0.8"/>
+            <path d="M50 28 C58 28, 72 42, 72 50 C72 58, 58 72, 50 72 C42 72, 28 58, 28 50 C28 42, 42 28, 50 28 Z" fill="rgba(7,7,13,0.9)" stroke="rgba(131,110,249,0.1)" strokeWidth="0.5"/>
+          </svg>
         </div>
 
-        {/* Feature highlights */}
-        <div style={{
-          background: "rgba(131,110,249,0.06)",
-          border: "1px solid rgba(131,110,249,0.12)",
-          borderRadius: 12, padding: "14px 16px", marginBottom: 24,
-          display: "flex", flexDirection: "column", gap: 10,
-        }}>
-          {features.map(({ icon, text }) => (
-            <div key={text} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{
-                width: 22, height: 22, borderRadius: 6, flexShrink: 0,
-                background: "rgba(131,110,249,0.15)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 11, color: "#836EF9",
-              }}>{icon}</span>
-              <span style={{
-                fontFamily: "'Inter', sans-serif", fontSize: 12.5, fontWeight: 450,
-                color: "#9896B8", letterSpacing: "-0.01em", lineHeight: 1.4,
-              }}>{text}</span>
+        <div style={{ position:"absolute", top:0, left:0, right:0, height:1, background:"linear-gradient(90deg, transparent 0%, rgba(131,110,249,0.6) 30%, rgba(192,132,252,0.4) 70%, transparent 100%)", zIndex:2 }} />
+
+        <div style={{ position:"relative", zIndex:2, padding:"36px 32px 28px" }}>
+          <div style={{ textAlign:"center", marginBottom:28 }}>
+            <div style={{ width:60, height:60, borderRadius:18, margin:"0 auto 18px", background:"linear-gradient(135deg, #836EF9 0%, #5b21b6 100%)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:26, boxShadow:"0 0 0 1px rgba(131,110,249,0.4), 0 0 40px rgba(131,110,249,0.5), 0 8px 24px rgba(0,0,0,0.5)" }}>&#9650;</div>
+            <h1 style={{ fontFamily:"'Syne', sans-serif", fontSize:26, fontWeight:800, color:"#fff", letterSpacing:"-0.04em", margin:"0 0 8px", lineHeight:1.1 }}>Monad CT Co-Pilot</h1>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
+              <div style={{ height:1, width:28, background:"linear-gradient(90deg, transparent, rgba(131,110,249,0.5))" }} />
+              <span style={{ color:"#836EF9", fontSize:9.5, letterSpacing:"0.14em", fontFamily:"'IBM Plex Mono', monospace", fontWeight:500 }}>ECOSYSTEM INTELLIGENCE</span>
+              <div style={{ height:1, width:28, background:"linear-gradient(90deg, rgba(131,110,249,0.5), transparent)" }} />
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Auth buttons */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
-          {providers.map(p => (
-            <button
-              key={p.id}
-              onClick={() => signIn(p.id)}
-              disabled={loading}
-              onMouseEnter={() => setHoveredBtn(p.id)}
-              onMouseLeave={() => setHoveredBtn(null)}
-              style={{
-                display: "flex", alignItems: "center", gap: 12,
-                padding: "13px 16px", borderRadius: 10,
-                background: hoveredBtn === p.id ? "rgba(131,110,249,0.08)" : "rgba(255,255,255,0.03)",
-                border: `1px solid ${hoveredBtn === p.id ? "rgba(131,110,249,0.5)" : "rgba(255,255,255,0.08)"}`,
-                color: "#E4E2FF", cursor: loading ? "not-allowed" : "pointer",
-                fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 500,
-                transition: "all 0.2s", opacity: loading ? 0.6 : 1,
-                letterSpacing: "-0.01em",
-              }}
-            >
-              <span style={{ width: 20, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                {loading ? (
-                  <div style={{ width: 16, height: 16, borderRadius: "50%", border: "2px solid rgba(131,110,249,0.3)", borderTopColor: "#836EF9", animation: "spin 0.8s linear infinite" }} />
-                ) : icons[p.id]}
-              </span>
-              {loading ? "Signing in..." : p.label}
-              {!loading && (
-                <span style={{ marginLeft: "auto", color: "#5C5A7A", fontSize: 12 }}>→</span>
-              )}
-            </button>
-          ))}
-        </div>
+          <div style={{ background:"rgba(131,110,249,0.06)", border:"1px solid rgba(131,110,249,0.14)", borderRadius:12, padding:"14px 16px", marginBottom:24, display:"flex", flexDirection:"column", gap:10 }}>
+            {features.map(({ icon, text }) => (
+              <div key={text} style={{ display:"flex", alignItems:"center", gap:10 }}>
+                <span style={{ width:22, height:22, borderRadius:6, flexShrink:0, background:"rgba(131,110,249,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:"#836EF9" }}>{icon}</span>
+                <span style={{ fontFamily:"'Inter', sans-serif", fontSize:12.5, fontWeight:450, color:"#9896B8", letterSpacing:"-0.01em", lineHeight:1.4 }}>{text}</span>
+              </div>
+            ))}
+          </div>
 
-        {error && (
-          <div style={{
-            background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.2)",
-            borderRadius: 8, padding: "10px 14px", marginBottom: 16,
-            color: "#f87171", fontSize: 12, textAlign: "center",
-            fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "0.02em",
-          }}>{error}</div>
-        )}
+          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
+            <div style={{ flex:1, height:1, background:"rgba(255,255,255,0.06)" }} />
+            <span style={{ fontFamily:"'IBM Plex Mono',monospace", fontSize:9, color:"#5C5A7A", letterSpacing:"0.08em" }}>SIGN IN WITH</span>
+            <div style={{ flex:1, height:1, background:"rgba(255,255,255,0.06)" }} />
+          </div>
 
-        {/* Footer */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 16, textAlign: "center" }}>
-          <p style={{ color: "#5C5A7A", fontSize: 11, margin: "0 0 10px", lineHeight: 1.6, letterSpacing: "0.01em" }}>
-            By signing in you agree to use this tool responsibly<br />for Monad ecosystem content.
-          </p>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-            <span style={{
-              fontFamily: "'IBM Plex Mono', monospace", fontSize: 9,
-              color: "#836EF9", letterSpacing: "0.08em",
-              background: "rgba(131,110,249,0.1)", border: "1px solid rgba(131,110,249,0.2)",
-              padding: "2px 8px", borderRadius: 4,
-            }}>v1 MVP</span>
-            <span style={{ color: "#5C5A7A", fontSize: 9, fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "0.06em" }}>
-              · BUILT FOR MONAD
-            </span>
+          <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:20 }}>
+            {providers.map(p => (
+              <button key={p.id} onClick={() => signIn(p.id)} disabled={loading}
+                onMouseEnter={() => setHoveredBtn(p.id)} onMouseLeave={() => setHoveredBtn(null)}
+                style={{ display:"flex", alignItems:"center", gap:12, padding:"13px 16px", borderRadius:10, background:hoveredBtn===p.id?"rgba(131,110,249,0.1)":"rgba(255,255,255,0.04)", border:hoveredBtn===p.id?"1px solid rgba(131,110,249,0.45)":"1px solid rgba(255,255,255,0.08)", color:"#E4E2FF", cursor:loading?"not-allowed":"pointer", fontFamily:"'Inter', sans-serif", fontSize:14, fontWeight:500, transition:"all 0.2s", opacity:loading?0.6:1, letterSpacing:"-0.01em", boxShadow:hoveredBtn===p.id?"0 0 20px rgba(131,110,249,0.1)":"none" }}
+              >
+                <span style={{ width:20, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  {loading ? <div style={{ width:16, height:16, borderRadius:"50%", border:"2px solid rgba(131,110,249,0.3)", borderTopColor:"#836EF9", animation:"spin 0.8s linear infinite" }} /> : icons[p.id]}
+                </span>
+                {loading ? "Signing in..." : p.label}
+                {!loading && <span style={{ marginLeft:"auto", color:"#5C5A7A", fontSize:13 }}>&#8594;</span>}
+              </button>
+            ))}
+          </div>
+
+          {error && <div style={{ background:"rgba(248,113,113,0.08)", border:"1px solid rgba(248,113,113,0.2)", borderRadius:8, padding:"10px 14px", marginBottom:16, color:"#f87171", fontSize:12, textAlign:"center", fontFamily:"'IBM Plex Mono', monospace" }}>{error}</div>}
+
+          <div style={{ borderTop:"1px solid rgba(255,255,255,0.05)", paddingTop:16, textAlign:"center" }}>
+            <p style={{ color:"#5C5A7A", fontSize:11, margin:"0 0 10px", lineHeight:1.6 }}>By signing in you agree to use this tool responsibly<br/>for Monad ecosystem content.</p>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6 }}>
+              <span style={{ fontFamily:"'IBM Plex Mono', monospace", fontSize:9, color:"#836EF9", background:"rgba(131,110,249,0.1)", border:"1px solid rgba(131,110,249,0.2)", padding:"2px 8px", borderRadius:4, letterSpacing:"0.08em" }}>v1 MVP</span>
+              <span style={{ color:"#5C5A7A", fontSize:9, fontFamily:"'IBM Plex Mono', monospace", letterSpacing:"0.06em" }}>· BUILT FOR MONAD</span>
+            </div>
           </div>
         </div>
       </div>
