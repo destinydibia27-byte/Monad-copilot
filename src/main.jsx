@@ -82,6 +82,10 @@ function LoginScreen() {
         .orb1 { animation: floatOrb1 8s ease-in-out infinite; }
         .orb2 { animation: floatOrb2 10s ease-in-out infinite; }
         .monad-bg { animation: shimmer 4s ease-in-out infinite; }
+        .login-title { font-family: Syne, sans-serif; font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.04em; margin: 0 0 8px; line-height: 1.1; white-space: nowrap; }
+        @media (max-width: 440px) { .login-title { font-size: 22px; white-space: normal; } }
+        .login-inner { padding: 36px 32px 28px; }
+        @media (max-width: 440px) { .login-inner { padding: 28px 20px 22px; } }
       `}</style>
 
       <div className="orb1" style={{ position:"absolute", top:"8%", left:"12%", width:320, height:320, borderRadius:"50%", background:"radial-gradient(circle, rgba(131,110,249,0.35) 0%, rgba(91,33,182,0.15) 50%, transparent 75%)", filter:"blur(48px)", pointerEvents:"none" }} />
@@ -89,7 +93,7 @@ function LoginScreen() {
       <div style={{ position:"absolute", bottom:"30%", left:"5%", width:160, height:160, borderRadius:"50%", background:"radial-gradient(circle, rgba(96,165,250,0.15) 0%, transparent 70%)", filter:"blur(30px)", pointerEvents:"none" }} />
       <div style={{ position:"absolute", top:"60%", right:"20%", width:100, height:100, borderRadius:"50%", background:"radial-gradient(circle, rgba(251,146,60,0.12) 0%, transparent 70%)", filter:"blur(20px)", pointerEvents:"none" }} />
 
-      <div className="login-card" style={{ position:"relative", zIndex:1, width:"100%", maxWidth:400, borderRadius:24, overflow:"hidden", boxShadow:"0 0 0 1px rgba(131,110,249,0.15), 0 32px 80px rgba(0,0,0,0.8)" }}>
+      <div className="login-card" style={{ position:"relative", zIndex:1, width:"100%", maxWidth:"min(400px, calc(100vw - 32px))", borderRadius:24, overflow:"hidden", boxShadow:"0 0 0 1px rgba(131,110,249,0.15), 0 32px 80px rgba(0,0,0,0.8)" }}>
         <div style={{ position:"absolute", inset:0, background:"linear-gradient(160deg, rgba(30,20,60,0.96) 0%, rgba(13,10,25,0.99) 60%, rgba(20,10,40,0.96) 100%)", backdropFilter:"blur(24px)" }} />
 
         <div className="monad-bg" style={{ position:"absolute", bottom:-40, right:-40, width:280, height:280, pointerEvents:"none", zIndex:0 }}>
@@ -108,7 +112,7 @@ function LoginScreen() {
 
         <div style={{ position:"absolute", top:0, left:0, right:0, height:1, background:"linear-gradient(90deg, transparent 0%, rgba(131,110,249,0.6) 30%, rgba(192,132,252,0.4) 70%, transparent 100%)", zIndex:2 }} />
 
-        <div style={{ position:"relative", zIndex:2, padding:"36px 32px 28px" }}>
+        <div className="login-inner" style={{ position:"relative", zIndex:2 }}>
           <div style={{ textAlign:"center", marginBottom:28 }}>
             <div style={{ margin:"0 auto 18px", width:64, height:64, display:"flex", alignItems:"center", justifyContent:"center", filter:"drop-shadow(0 0 20px rgba(131,110,249,0.6))" }}>
               <svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -118,7 +122,7 @@ function LoginScreen() {
                 <line x1="12" y1="27" x2="20" y2="27" stroke="#836EF9" strokeWidth="1.5" strokeLinecap="round"/>
               </svg>
             </div>
-            <h1 style={{ fontFamily:"'Syne', sans-serif", fontSize:26, fontWeight:800, color:"#fff", letterSpacing:"-0.04em", margin:"0 0 8px", lineHeight:1.1 }}>Monad CT Co-Pilot</h1>
+            <h1 className="login-title">Monad CT Co-Pilot</h1>
             <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
               <div style={{ height:1, width:28, background:"linear-gradient(90deg, transparent, rgba(131,110,249,0.5))" }} />
               <span style={{ color:"#836EF9", fontSize:9.5, letterSpacing:"0.14em", fontFamily:"'IBM Plex Mono', monospace", fontWeight:500 }}>ECOSYSTEM INTELLIGENCE</span>
