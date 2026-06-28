@@ -44,11 +44,20 @@ function LoginScreen() {
     ),
   };
 
-  const features = [
-    { icon: "⚡", text: "Live GitHub signals from Monad ecosystem repos" },
-    { icon: "✦",  text: "AI-generated tweet drafts in your voice"         },
-    { icon: "✓",  text: "Approve, edit, and post directly to X"           },
+  const slides = [
+    { icon: "⚡", title: "Live GitHub Signals", desc: "Real-time commits from Monad ecosystem repos — Kuru, aPriori, Lumiterra and more." },
+    { icon: "✦",  title: "AI Tweet Drafts",     desc: "Groq-powered drafts written in your voice. Two options generated per signal." },
+    { icon: "✓",  title: "One-Click to X",      desc: "Approve, edit, or reject drafts. Post approved tweets directly to X instantly." },
   ];
+  const [slideIdx, setSlideIdx] = useState(0);
+  const [fadeIn, setFadeIn] = useState(true);
+  useEffect(() => {
+    const t = setInterval(() => {
+      setFadeIn(false);
+      setTimeout(() => { setSlideIdx(i => (i + 1) % 3); setFadeIn(true); }, 250);
+    }, 2800);
+    return () => clearInterval(t);
+  }, []);
 
   const providers = [
     { id: "google", label: "Continue with Google" },
@@ -117,12 +126,16 @@ function LoginScreen() {
             </div>
           </div>
 
-          <div style={{ background:"rgba(131,110,249,0.06)", border:"1px solid rgba(131,110,249,0.14)", borderRadius:12, padding:"14px 16px", marginBottom:24, display:"flex", flexDirection:"column", gap:10 }}>
-            {features.map(({ icon, text }) => (
-              <div key={text} style={{ display:"flex", alignItems:"center", gap:10 }}>
-                <span style={{ width:22, height:22, borderRadius:6, flexShrink:0, background:"rgba(131,110,249,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:"#836EF9" }}>{icon}</span>
-                <span style={{ fontFamily:"'Inter', sans-serif", fontSize:12.5, fontWeight:450, color:"#9896B8", letterSpacing:"-0.01em", lineHeight:1.4 }}>{text}</span>
-              </div>
+          <div style={{ background:"rgba(131,110,249,0.06)", border:"1px solid rgba(131,110,249,0.14)", borderRadius:14, padding:"20px 16px", marginBottom:20, minHeight:130, display:"flex", flexDirection:"column", alignItems:"center", textAlign:"center", gap:12, transition:"opacity 0.25s", opacity:fadeIn?1:0 }}>
+            <span style={{ width:46, height:46, borderRadius:13, background:"rgba(131,110,249,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, color:"#836EF9" }}>{slides[slideIdx].icon}</span>
+            <div>
+              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:14, fontWeight:600, color:"#E4E2FF", marginBottom:6 }}>{slides[slideIdx].title}</div>
+              <div style={{ fontFamily:"'Inter',sans-serif", fontSize:12.5, color:"#9896B8", lineHeight:1.5, letterSpacing:"-0.01em" }}>{slides[slideIdx].desc}</div>
+            </div>
+          </div>
+          <div style={{ display:"flex", justifyContent:"center", gap:6, marginBottom:20 }}>
+            {slides.map((_, i) => (
+              <div key={i} onClick={() => setSlideIdx(i)} style={{ width:i===slideIdx?20:6, height:6, borderRadius:3, background:i===slideIdx?"#836EF9":"rgba(131,110,249,0.25)", transition:"all 0.3s", cursor:"pointer" }} />
             ))}
           </div>
 
