@@ -85,7 +85,7 @@ function LoginScreen() {
         .login-title { font-family: Syne, sans-serif; font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.04em; margin: 0 0 8px; line-height: 1.1; white-space: nowrap; }
         @media (max-width: 440px) { .login-title { font-size: 22px; white-space: normal; } }
         .login-inner { padding: 36px 32px 28px; }
-        @media (max-width: 440px) { .login-inner { padding: 28px 20px 22px; } }
+        @media (max-width: 440px) { .login-inner { padding: 22px 16px 18px; } }
       `}</style>
 
       <div className="orb1" style={{ position:"absolute", top:"8%", left:"12%", width:320, height:320, borderRadius:"50%", background:"radial-gradient(circle, rgba(131,110,249,0.35) 0%, rgba(91,33,182,0.15) 50%, transparent 75%)", filter:"blur(48px)", pointerEvents:"none" }} />
@@ -93,7 +93,7 @@ function LoginScreen() {
       <div style={{ position:"absolute", bottom:"30%", left:"5%", width:160, height:160, borderRadius:"50%", background:"radial-gradient(circle, rgba(96,165,250,0.15) 0%, transparent 70%)", filter:"blur(30px)", pointerEvents:"none" }} />
       <div style={{ position:"absolute", top:"60%", right:"20%", width:100, height:100, borderRadius:"50%", background:"radial-gradient(circle, rgba(251,146,60,0.12) 0%, transparent 70%)", filter:"blur(20px)", pointerEvents:"none" }} />
 
-      <div className="login-card" style={{ position:"relative", zIndex:1, width:"100%", maxWidth:"min(400px, calc(100vw - 32px))", borderRadius:24, overflow:"hidden", boxShadow:"0 0 0 1px rgba(131,110,249,0.15), 0 32px 80px rgba(0,0,0,0.8)" }}>
+      <div className="login-card" style={{ position:"relative", zIndex:1, width:"100%", maxWidth:"min(380px, calc(100vw - 48px))", borderRadius:24, overflow:"hidden", boxShadow:"0 0 0 1px rgba(131,110,249,0.15), 0 32px 80px rgba(0,0,0,0.8)" }}>
         <div style={{ position:"absolute", inset:0, background:"linear-gradient(160deg, rgba(30,20,60,0.96) 0%, rgba(13,10,25,0.99) 60%, rgba(20,10,40,0.96) 100%)", backdropFilter:"blur(24px)" }} />
 
         <div className="monad-bg" style={{ position:"absolute", bottom:-40, right:-40, width:280, height:280, pointerEvents:"none", zIndex:0 }}>
@@ -114,7 +114,7 @@ function LoginScreen() {
 
         <div className="login-inner" style={{ position:"relative", zIndex:2 }}>
           <div style={{ textAlign:"center", marginBottom:28 }}>
-            <div style={{ margin:"0 auto 18px", width:64, height:64, display:"flex", alignItems:"center", justifyContent:"center", filter:"drop-shadow(0 0 20px rgba(131,110,249,0.6))" }}>
+            <div style={{ margin:"0 auto 18px", width:52, height:52, display:"flex", alignItems:"center", justifyContent:"center", filter:"drop-shadow(0 0 20px rgba(131,110,249,0.6))" }}>
               <svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="32" height="32" rx="9" fill="#13123A"/>
                 <path d="M16 6L27 25H5L16 6Z" stroke="#836EF9" strokeWidth="1.8" fill="none" strokeLinejoin="round"/>
@@ -130,7 +130,7 @@ function LoginScreen() {
             </div>
           </div>
 
-          <div style={{ background:"rgba(131,110,249,0.06)", border:"1px solid rgba(131,110,249,0.14)", borderRadius:14, padding:"20px 16px", marginBottom:20, minHeight:130, display:"flex", flexDirection:"column", alignItems:"center", textAlign:"center", gap:12, transition:"opacity 0.25s", opacity:fadeIn?1:0 }}>
+          <div style={{ background:"rgba(131,110,249,0.06)", border:"1px solid rgba(131,110,249,0.14)", borderRadius:14, padding:"20px 16px", marginBottom:20, minHeight:110, display:"flex", flexDirection:"column", alignItems:"center", textAlign:"center", gap:12, transition:"opacity 0.25s", opacity:fadeIn?1:0 }}>
             <span style={{ width:46, height:46, borderRadius:13, background:"rgba(131,110,249,0.15)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, color:"#836EF9" }}>{slides[slideIdx].icon}</span>
             <div>
               <div style={{ fontFamily:"'Inter',sans-serif", fontSize:14, fontWeight:600, color:"#E4E2FF", marginBottom:6 }}>{slides[slideIdx].title}</div>
